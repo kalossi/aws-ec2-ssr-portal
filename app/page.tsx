@@ -1,14 +1,16 @@
-'use client';
-import React from 'react';
+'use client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/header';
 import Footer from './components/footer';
 import Home from './components/home';
-import Resources, { ServerSideInstances } from './components/resources';
 import AWS from 'aws-sdk';
+import Resources from './components/resources';
 
-interface Props {
-  serverSideInstances: ServerSideInstances[];
+export interface ServerSideInstances {
+  instanceID: string;
+  state: string;
+  publicIP: string | "N/A";
+  privateIP: string | "N/A";
 }
 
 // only seen on server side
@@ -46,19 +48,30 @@ export const fetchEc2Instances = async () => {
   }
 };
 
-const App = () => {
+const App: React.FC<{serversideInstances: { serverSideInstances: ServerSideInstances[]}}> = ( {serverSideInstances} ) => {
+
   return (
     <Router>
       <div>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/resources" element={<Resources />}/>
+          <Route path="/resources" element={<Resources serverSideInstances={ serverSideInstances }/>}/>
         </Routes>
         <Footer />
       </div>
     </Router>
   );
+};
+
+export const serverSideInstances = async () => { 
+  await fetchEc2Instances();
+
+  return {
+    props: {
+      serverSideInstances,
+    },
+  };
 };
 
 export default App

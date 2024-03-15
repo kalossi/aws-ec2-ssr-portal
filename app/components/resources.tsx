@@ -1,35 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { fetchEc2Instances } from "../page";
+import { useEffect, useState } from "react";
+import { ServerSideInstances, fetchEc2Instances } from "../page";
 
-export interface ServerSideInstances {
-  instanceID: string;
-  state: string;
-  publicIP: string | "N/A";
-  privateIP: string | "N/A";
-}
 
-const Resources = () => {
+const useServerSideEffect = () => {
   const [serverSideInstances, setServerSideInstances] = useState<ServerSideInstances[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchEc2Instances();
-        console.log(data);
         setServerSideInstances(data);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
+  
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  return serverSideInstances;
+};
+
+const Resources: React.FC<{ serverSideInstances: ServerSideInstances[]}> = ({ serverSideInstances }) => {
+
+  useServerSideEffect();
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
