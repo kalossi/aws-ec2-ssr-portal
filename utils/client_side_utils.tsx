@@ -1,7 +1,6 @@
-'use client'
+// .utils/client_side_utils.tsx
 import { useEffect, useState } from "react";
 import { ServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
-
 
 export const useServerSideEffect = () => {
   const [serverSideInstances, setServerSideInstances] = useState<ServerSideInstances[]>([]);
@@ -17,7 +16,7 @@ export const useServerSideEffect = () => {
     };
   
     fetchData();
-  }, []);
+  }, [serverSideInstances]);
 
   return serverSideInstances;
 };

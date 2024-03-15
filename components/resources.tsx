@@ -1,28 +1,8 @@
-// .app/components/resources.tsx
-import { useEffect, useState } from "react";
-import { ServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
+// .components/resources.tsx
+import { useServerSideEffect } from "../utils/client_side_utils";
+import { ServerSideInstances } from "../utils/server_side_utils";
 
-
-const useServerSideEffect = () => {
-  const [serverSideInstances, setServerSideInstances] = useState<ServerSideInstances[]>([]);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchEc2Instances();
-        setServerSideInstances(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } 
-    };
-  
-    fetchData();
-  }, []);
-
-  return serverSideInstances;
-};
-
-const Resources: React.FC<{ serverSideInstances: ServerSideInstances[]}> = ({ serverSideInstances }) => {
+export const Resources: React.FC<{ serverSideInstances: ServerSideInstances[]}> = ({ serverSideInstances }) => {
 
   useServerSideEffect();
 

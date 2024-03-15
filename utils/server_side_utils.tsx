@@ -1,3 +1,4 @@
+// .utils/server_side_utils.tsx
 import AWS from 'aws-sdk';
 
 export interface ServerSideInstances {
@@ -25,8 +26,9 @@ export interface ServerSideInstances {
       console.log("fetching promise...");
       const data = await ec2.describeInstances().promise();
       console.log("fetched promise...");
-      const instances: ServerSideInstances[] = data.Reservations.flatMap(
+      const instances: ServerSideInstances[] = data.Reservations?.flatMap(
         (reservation) => {
+          console.log('reservation is:', reservation);
           return reservation.Instances?.map((instance) => ({
             instanceID: instance.InstanceId || 'N/A',
             state: instance.State?.Name || "N/A",
