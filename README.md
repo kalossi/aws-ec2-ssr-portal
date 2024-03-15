@@ -1,6 +1,6 @@
 # AWS EC2 machine loging utility
 
-A simple site to view your ec2 instances in cloud, using aws-sdk API
+A simple site to view your ec2 instances in cloud, using aws-sdk API (work in progress)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
