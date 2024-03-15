@@ -22,17 +22,17 @@ export interface ServerSideInstances {
   
   export const fetchEc2Instances = async () => {
     try {
-      console.log("fetching...");
+      console.log("fetching promise...");
       const data = await ec2.describeInstances().promise();
       console.log("fetched promise...");
       const instances: ServerSideInstances[] = data.Reservations.flatMap(
         (reservation) => {
-          reservation.Instances?.map((instance) => ({
-            instanceID: instance.InstanceId,
+          return reservation.Instances?.map((instance) => ({
+            instanceID: instance.InstanceId || 'N/A',
             state: instance.State?.Name || "N/A",
             publicIP: instance.PublicIpAddress || "N/A",
             privateIP: instance.PrivateIpAddress || "N/A",
-          }));
+          })) || [];
         }
       );
       return instances;
