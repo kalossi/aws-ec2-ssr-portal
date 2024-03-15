@@ -8,6 +8,8 @@ import { ServerSideInstances, fetchEc2Instances } from './utils/server_side_util
 
 const App: React.FC<{serversideInstances: { serverSideInstances: ServerSideInstances[]}}> = ( {serverSideInstances} ) => {
 
+  console.log('inside the APP:', serverSideInstances);
+
   return (
     <Router>
       <div>
