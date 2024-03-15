@@ -46,7 +46,7 @@ export const fetchEc2Instances = async () => {
   }
 };
 
-const App: React.FC<Props> = () => {
+const App = () => {
   return (
     <Router>
       <div>
