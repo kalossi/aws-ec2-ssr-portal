@@ -1,5 +1,6 @@
+// .app/components/resources.tsx
 import { useEffect, useState } from "react";
-import { ServerSideInstances, fetchEc2Instances } from "../page";
+import { ServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
 
 
 const useServerSideEffect = () => {
