@@ -1,5 +1,4 @@
-//.app/page.tsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//.pages/index.tsx
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Home from '../components/home';
@@ -10,17 +9,12 @@ import { GetServerSideProps } from 'next';
 const App = ({ serverSideInstances}: { serverSideInstances: ServerSideInstances[] }) => {
   
   return (
-    <Router>
       <div>
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/* Pass the fetched data as a prop to the Resources component */}
-          <Route path="/resources" element={<Resources serverSideInstances={serverSideInstances} />} />
-        </Routes>
+          <Home />
+          <Resources serverSideInstances={serverSideInstances} />
         <Footer />
       </div>
-    </Router>
   );
 };
 

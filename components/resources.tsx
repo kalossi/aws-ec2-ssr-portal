@@ -1,4 +1,4 @@
-// .components/resources.tsx
+//.components/resources.tsx
 import { useServerSideEffect } from "../utils/client_side_utils";
 import { ServerSideInstances } from "../utils/server_side_utils";
 
