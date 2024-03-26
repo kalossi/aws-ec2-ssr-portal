@@ -28,10 +28,9 @@ export const fetchEc2Instances = async () => {
     console.log("fetched promise...");
     const instances: ServerSideInstances[] = data.Reservations?.flatMap(
       (reservation) => {
-        console.log('reservation is:', reservation);
         return reservation.Instances?.map((instance) => ({
           instanceID: instance.InstanceId || 'N/A',
-          name: instance.State?.Name || "N/A",
+          name: instance.KeyName || "N/A",
           publicIP: instance.PublicIpAddress || "N/A",
           privateIP: instance.PrivateIpAddress || "N/A",
         })) || [];
