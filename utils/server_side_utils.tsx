@@ -30,7 +30,7 @@ export const fetchEc2Instances = async () => {
       (reservation) => {
         return reservation.Instances?.map((instance) => ({
           instanceID: instance.InstanceId || 'N/A',
-          name: instance.KeyName || "N/A",
+          name: instance.Tags?.find(tag => tag.Key == 'Name')?.Value || "N/A",
           publicIP: instance.PublicIpAddress || "N/A",
           privateIP: instance.PrivateIpAddress || "N/A",
         })) || [];
