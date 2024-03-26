@@ -18,8 +18,8 @@ const App = ({ serverSideInstances}: { serverSideInstances: ServerSideInstances[
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const serverSideInstances = await fetchEc2Instances();
+export const getServerSideProps: GetServerSideProps = async () => {
+  const serverSideInstances = fetchEc2Instances();
 
   return {
     props: {
