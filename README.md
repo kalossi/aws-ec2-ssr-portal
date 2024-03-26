@@ -41,8 +41,5 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 npm install aws-sdk
 ```
 ```
-npm install react-router-dom
-```
-```
 npm install
 ```
