@@ -4,7 +4,7 @@ import { ServerSideInstances } from "../utils/server_side_utils";
 
 export const Resources: React.FC<{ serverSideInstances: ServerSideInstances[]}> = ({ serverSideInstances }) => {
 
-  useServerSideEffect();
+  // useServerSideEffect();
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
