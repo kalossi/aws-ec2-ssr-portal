@@ -1,4 +1,4 @@
-// .utils/server_side_utils.tsx
+//.utils/server_side_utils.tsx
 import AWS from 'aws-sdk';
 
 export interface ServerSideInstances {
@@ -8,10 +8,10 @@ export interface ServerSideInstances {
     privateIP: string | "N/A";
   }
   
-//   only seen on server side
-  console.log("Attempting with the following credentials:");
-  console.log("accessKeyId:", process.env.AWS_SDK_ID);
-  console.log("secretAccessKey:", process.env.AWS_SDK_KEY);
+// //   only seen on server side
+//   console.log("Attempting with the following credentials:");
+//   console.log("accessKeyId:", process.env.AWS_SDK_ID);
+//   console.log("secretAccessKey:", process.env.AWS_SDK_KEY);
   
   AWS.config.update({
     accessKeyId: process.env.AWS_SDK_ID,
