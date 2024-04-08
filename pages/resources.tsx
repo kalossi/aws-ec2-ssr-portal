@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next";
 import { ServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
 import Header from "@/components/header";
 
-export const Resources: React.FC<{ serverSideInstances: ServerSideInstances[]}> = ({ serverSideInstances }) => {
+export const Resources = ({ serverSideInstances }: { serverSideInstances: ServerSideInstances[] }) => {
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
