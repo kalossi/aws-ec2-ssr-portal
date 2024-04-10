@@ -43,3 +43,7 @@ npm install aws-sdk
 ```
 npm install
 ```
+
+## TODO:
+- Some kind of login
+- Database connection and qeueries
