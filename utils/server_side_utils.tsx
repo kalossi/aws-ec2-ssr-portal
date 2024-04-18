@@ -1,5 +1,6 @@
 //.utils/server_side_utils.tsx
 import AWS from 'aws-sdk';
+//in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
 
 export interface InitialServerSideInstances {
@@ -8,19 +9,21 @@ export interface InitialServerSideInstances {
   publicIP: string | "N/A";
   privateIP: string | "N/A";
 }
-
+//invoke instance so that you can use it in many places
 const wss = new WebSocketServer({port: 8080});
 
+// on initial render TODO: could these two be done better?
 const startWSServer = () => {
   wss.on('connection', async (ws: WebSocket) => {
     const instances = await fetchEc2Instances();
     ws.send(JSON.stringify(instances));
     ws.on('close', () => {
-      console.log('client disconnected')
+      console.log('web socket client disconnected')
     })
   });
 }
 
+//broadcast to all the clients
 const broadcastUpdates = async () => {
   const instances = await fetchEc2Instances();
   const message = JSON.stringify(instances);
@@ -66,5 +69,6 @@ export const fetchEc2Instances = async () => {
   }
 };
 
+//start server once in render and fetch and send periodically
 startWSServer();
 setInterval(broadcastUpdates, 5000);

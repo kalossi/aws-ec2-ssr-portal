@@ -7,11 +7,17 @@ import Header from "@/components/header";
 export const Resources = ({ initialServerSideInstances }: { initialServerSideInstances: InitialServerSideInstances[] }) => {
   const [serverSideInstances, setServerSideInstances] = useState(initialServerSideInstances);
 
+  //starts a web socket connection when the serverSideInstances change
   useEffect(() =>{
+    //establish WebSocket server connection ("creates an instance of a class") - Global object in browser enviroment
     const ws = new WebSocket('ws://localhost:8080');
+    //triggers when message from server is received (with interval - see ../utils/server_side_utils)
     ws.onmessage = (event) => {
+      //received message event.data is a binary blob
       const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstances[];
+      //compare is done in string type
       if (JSON.stringify(receivedInstances) !== JSON.stringify(serverSideInstances)){
+        //if changes has happened, update the state
         setServerSideInstances(receivedInstances);
       }
     };
@@ -19,7 +25,7 @@ export const Resources = ({ initialServerSideInstances }: { initialServerSideIns
     ws.onerror = (error) => {
       console.error(error);
     };
-
+    //remember to close WebSocket connection!
     return () => {
       ws.close();
     }
