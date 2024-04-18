@@ -50,3 +50,4 @@ npm install ws
 ## TODO:
 - Some kind of login
 - Database connection and qeueries
+- Change also the server side WebSocket on change only!
