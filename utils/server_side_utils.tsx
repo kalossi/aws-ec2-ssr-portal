@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 //in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
 
-export interface InitialServerSideInstances {
+export interface InitialServerSideInstance {
   instanceID: string;
   name: string | 'N/A';
   publicIP: string | "N/A";
@@ -56,7 +56,7 @@ export const fetchEc2Instances = async () => {
     console.log("fetching promise...");
     const data = await ec2.describeInstances().promise();
     console.log("fetched promise...");
-    const instances: InitialServerSideInstances[] = data.Reservations?.flatMap(
+    const instances: InitialServerSideInstance[] = data.Reservations?.flatMap(
       (reservation) => {
         return reservation.Instances?.map((instance) => ({
           instanceID: instance.InstanceId || 'N/A',

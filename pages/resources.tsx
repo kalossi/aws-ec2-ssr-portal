@@ -1,10 +1,10 @@
 //.components/resources.tsx
 import { GetServerSideProps } from "next";
-import { InitialServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
+import { InitialServerSideInstance, fetchEc2Instances } from "../utils/server_side_utils";
 import { useState, useEffect } from "react";
 import Header from "@/components/header";
 
-export const Resources = ({ initialServerSideInstances }: { initialServerSideInstances: InitialServerSideInstances[] }) => {
+export const Resources = ({ initialServerSideInstances }: { initialServerSideInstances: InitialServerSideInstance[] }) => {
   const [serverSideInstances, setServerSideInstances] = useState(initialServerSideInstances);
 
   //starts a web socket connection when the serverSideInstances change
@@ -14,7 +14,7 @@ export const Resources = ({ initialServerSideInstances }: { initialServerSideIns
     //triggers when message from server is received (with interval - see ../utils/server_side_utils)
     ws.onmessage = (event) => {
       //received message event.data is string but maybe this is better for consistency
-      const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstances[];
+      const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstance[];
       //compare is done in string type
       if (JSON.stringify(receivedInstances) !== JSON.stringify(serverSideInstances)){
         //if changes has happened, update the state
@@ -50,7 +50,7 @@ export const Resources = ({ initialServerSideInstances }: { initialServerSideIns
           </tr>
         </thead>
         <tbody>
-          {serverSideInstances.map((instance: InitialServerSideInstances) => (
+          {serverSideInstances.map((instance: InitialServerSideInstance) => (
             <tr key={instance.instanceID}>
               <td>{instance.instanceID}</td>
               <td>{instance.name}</td>
