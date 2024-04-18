@@ -13,7 +13,7 @@ export const Resources = ({ initialServerSideInstances }: { initialServerSideIns
     const ws = new WebSocket('ws://localhost:8080');
     //triggers when message from server is received (with interval - see ../utils/server_side_utils)
     ws.onmessage = (event) => {
-      //received message event.data is received as a binary blob
+      //received message event.data is string but maybe this is better for consistency
       const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstances[];
       //compare is done in string type
       if (JSON.stringify(receivedInstances) !== JSON.stringify(serverSideInstances)){
