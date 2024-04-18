@@ -15,7 +15,9 @@ const wss = new WebSocketServer({port: 8080});
 // on initial render TODO: could these two be done better?
 const startWSServer = () => {
   wss.on('connection', async (ws: WebSocket) => {
+
     const instances = await fetchEc2Instances();
+    //sent as string
     ws.send(JSON.stringify(instances));
     ws.on('close', () => {
       console.log('web socket client disconnected')
@@ -26,7 +28,9 @@ const startWSServer = () => {
 //broadcast to all the clients
 const broadcastUpdates = async () => {
   const instances = await fetchEc2Instances();
+  //again, as string
   const message = JSON.stringify(instances);
+  //array of clients, objects
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
