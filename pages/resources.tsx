@@ -1,10 +1,29 @@
 //.components/resources.tsx
-// import { useServerSideEffect } from "../utils/client_side_utils";
 import { GetServerSideProps } from "next";
-import { ServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
+import { InitialServerSideInstances, fetchEc2Instances } from "../utils/server_side_utils";
+import { useState, useEffect } from "react";
 import Header from "@/components/header";
 
-export const Resources = ({ serverSideInstances }: { serverSideInstances: ServerSideInstances[] }) => {
+export const Resources = ({ initialServerSideInstances }: { initialServerSideInstances: InitialServerSideInstances[] }) => {
+  const [serverSideInstances, setServerSideInstances] = useState(initialServerSideInstances);
+
+  useEffect(() =>{
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onmessage = (event) => {
+      const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstances[];
+      if (JSON.stringify(receivedInstances) !== JSON.stringify(serverSideInstances)){
+        setServerSideInstances(receivedInstances);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error(error);
+    };
+
+    return () => {
+      ws.close();
+    }
+  }, [serverSideInstances]);
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
@@ -25,7 +44,7 @@ export const Resources = ({ serverSideInstances }: { serverSideInstances: Server
           </tr>
         </thead>
         <tbody>
-          {serverSideInstances.map((instance: ServerSideInstances) => (
+          {serverSideInstances.map((instance: InitialServerSideInstances) => (
             <tr key={instance.instanceID}>
               <td>{instance.instanceID}</td>
               <td>{instance.name}</td>
@@ -42,7 +61,6 @@ export const Resources = ({ serverSideInstances }: { serverSideInstances: Server
 export const getServerSideProps: GetServerSideProps = async () => {
   const serverSideInstances = await fetchEc2Instances();
   console.log(serverSideInstances);
-  
   return {
     props: { serverSideInstances },
   };

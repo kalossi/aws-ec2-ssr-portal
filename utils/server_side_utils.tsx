@@ -1,11 +1,34 @@
 //.utils/server_side_utils.tsx
 import AWS from 'aws-sdk';
+import { WebSocketServer, WebSocket } from 'ws';
 
-export interface ServerSideInstances {
+export interface InitialServerSideInstances {
   instanceID: string;
   name: string | 'N/A';
   publicIP: string | "N/A";
   privateIP: string | "N/A";
+}
+
+const wss = new WebSocketServer({port: 8080});
+
+const startWSServer = () => {
+  wss.on('connection', async (ws: WebSocket) => {
+    const instances = await fetchEc2Instances();
+    ws.send(JSON.stringify(instances));
+    ws.on('close', () => {
+      console.log('client disconnected')
+    })
+  });
+}
+
+const broadcastUpdates = async () => {
+  const instances = await fetchEc2Instances();
+  const message = JSON.stringify(instances);
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
 }
 
 //only seen on server side
@@ -26,7 +49,7 @@ export const fetchEc2Instances = async () => {
     console.log("fetching promise...");
     const data = await ec2.describeInstances().promise();
     console.log("fetched promise...");
-    const instances: ServerSideInstances[] = data.Reservations?.flatMap(
+    const instances: InitialServerSideInstances[] = data.Reservations?.flatMap(
       (reservation) => {
         return reservation.Instances?.map((instance) => ({
           instanceID: instance.InstanceId || 'N/A',
@@ -42,3 +65,6 @@ export const fetchEc2Instances = async () => {
     throw error;
   }
 };
+
+startWSServer();
+setInterval(broadcastUpdates, 5000);
