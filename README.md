@@ -43,6 +43,9 @@ npm install aws-sdk
 ```
 npm install
 ```
+```
+npm install ws
+```
 
 ## TODO:
 - Some kind of login
