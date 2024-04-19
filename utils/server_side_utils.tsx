@@ -25,7 +25,7 @@ const startWSServer = () => {
   });
 }
 
-//broadcast to all the clients
+//broadcast to all the clients - called with a interval again and again
 const broadcastUpdates = async () => {
   const instances = await fetchEc2Instances();
   //again, as string
