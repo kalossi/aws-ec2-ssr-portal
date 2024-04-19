@@ -12,7 +12,7 @@ export interface InitialServerSideInstance {
 //invoke instance so that you can use it in many places
 const wss = new WebSocketServer({port: 8080});
 
-// on initial render TODO: could these two be done better?
+// on initial render - better to split these two and they also serve a different scenario, although using the same fetch
 const startWSServer = () => {
   wss.on('connection', async (ws: WebSocket) => {
 
