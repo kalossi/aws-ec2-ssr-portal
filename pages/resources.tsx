@@ -19,18 +19,22 @@ const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstanc
     port: 5432,
   });
 
-  console.log(`inside the db func: ${serverSideInstances}`);
+  // console.log(`inside the db func: ${serverSideInstances}`);
 
   try {
     await client.connect();
     for (const instance of serverSideInstances) {
-      const res = await client.query(`
-        INSERT INTO instances (instance_id, private_ip, public_ip)
-        VALUES ('${instance.instanceID}','${instance.privateIP}', '${instance.publicIP}');
-      `);
+      const dbQuery = `
+      INSERT INTO instances (instance_id, private_ip, public_ip)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (instance_id) DO NOTHING`;
+      const values = [instance.instanceID, instance.privateIP, instance.publicIP];
+      const res = await client.query(dbQuery, values);
+      await client.query('COMMIT')
     }
   } catch (err) {
     if (err instanceof Error) {
+      await client.query('ROLLBACK')
       console.error("Error inserting data:", err.stack);
     } else {
       console.log("Unexpected error");

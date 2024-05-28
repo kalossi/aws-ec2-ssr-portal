@@ -53,9 +53,9 @@ const ec2 = new AWS.EC2();
 
 export const fetchEc2Instances = async () => {
   try {
-    console.log("fetching promise...");
+    // console.log("fetching promise...");
     const data = await ec2.describeInstances().promise();
-    console.log("fetched promise...");
+    // console.log("fetched promise...");
     const instances: InitialServerSideInstance[] = data.Reservations?.flatMap(
       (reservation) => {
         return reservation.Instances?.map((instance) => ({
