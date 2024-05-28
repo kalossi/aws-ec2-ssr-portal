@@ -55,6 +55,4 @@ npm install pg
 ```
 
 ## TODO:
-- Some kind of login
-- Database connection and qeueries
-- Change also the server side WebSocket on change only!
+- What next? What could _it_ do? :)
