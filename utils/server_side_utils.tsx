@@ -10,7 +10,7 @@ export interface InitialServerSideInstance {
   privateIP: string | "N/A";
 }
 //invoke instance so that you can use it in many places
-const wss = new WebSocketServer({port: 8080});
+const wss = new WebSocketServer({port: 8081});
 
 // on initial render - better to split these two and they also serve a different scenario, although using the same fetch
 const startWSServer = () => {

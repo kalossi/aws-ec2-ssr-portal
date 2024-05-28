@@ -49,6 +49,9 @@ npm install ws
 ```
 npm install --save-dev @types/ws
 ```
+```
+npm install pg
+```
 
 ## TODO:
 - Some kind of login
