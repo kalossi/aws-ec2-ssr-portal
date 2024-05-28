@@ -36,6 +36,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## Prerequisites
 
 - You need node and npm installed
+- I installed Docker container for the PG server testing
 
 ```
 npm install aws-sdk
