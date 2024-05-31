@@ -53,6 +53,9 @@ npm install --save-dev @types/ws
 ```
 npm install pg
 ```
+```
+npm i --save-dev @types/bcrypt
+```
 
 ## TODO:
 - What next? What could _it_ do? :)

@@ -6,49 +6,39 @@ import {
   fetchEc2Instances,
 } from "../utils/server_side_utils";
 import { useState, useEffect } from "react";
+import pool from '../utils/db'
 import Header from "@/components/header";
 
 const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstance[]) => {
-  const { Client } = require('pg');
-
-  const client = new Client({
-    user: "pg",
-    host: "localhost",
-    database: "test",
-    password: "test1234",
-    port: 5432,
-  });
 
   // console.log(`inside the db func: ${serverSideInstances}`);
 
   try {
-    await client.connect();
+    await pool.connect();
     for (const instance of serverSideInstances) {
       const dbQuery = `
       INSERT INTO instances (instance_id, private_ip, public_ip)
       VALUES ($1, $2, $3)
       ON CONFLICT (instance_id) DO NOTHING`;
       const values = [instance.instanceID, instance.privateIP, instance.publicIP];
-      const res = await client.query(dbQuery, values);
-      await client.query('COMMIT')
+      const res = await pool.query(dbQuery, values);
+      await pool.query('COMMIT')
     }
   } catch (err) {
     if (err instanceof Error) {
-      await client.query('ROLLBACK')
+      await pool.query('ROLLBACK')
       console.error("Error inserting data:", err.stack);
     } else {
       console.log("Unexpected error");
     }
   } finally {
-    await client.end();
+    await pool.end();
   }
 };
 
 export const Resources = ({
-  initialServerSideInstances,
-}: {
-  initialServerSideInstances: InitialServerSideInstance[];
-}) => {
+  initialServerSideInstances,}: {
+  initialServerSideInstances: InitialServerSideInstance[] }) => {
   const [serverSideInstances, setServerSideInstances] = useState(
     initialServerSideInstances
   );
