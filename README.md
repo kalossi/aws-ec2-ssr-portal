@@ -74,7 +74,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pg_data_volume:/var/lib/postgresql/data
+      - ./pg_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer
