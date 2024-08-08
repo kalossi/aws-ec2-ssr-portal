@@ -2,3 +2,5 @@
 *node*
 public/
 .eslint*
+pg*
+.env*
