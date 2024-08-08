@@ -56,3 +56,31 @@ npm install pg
 
 ## TODO:
 - What next? What could _it_ do? :)
+## The db used in this example is initiated using following yaml for Docker:
+```
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pg
+      POSTGRES_PASSWORD: test1234
+      POSTGRES_DB: test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data_volume:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  pg_data_volume:
+```
