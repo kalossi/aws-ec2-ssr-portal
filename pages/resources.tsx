@@ -1,4 +1,4 @@
-//.components/resources.tsx
+//.pages/resources.tsx
 //the backend
 import { GetServerSideProps } from "next";
 import {
@@ -10,34 +10,33 @@ import pool from '../utils/db'
 import Header from "@/components/header";
 
 const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstance[]) => {
-
-  // console.log(`inside the db func: ${serverSideInstances}`);
+  const client = await pool.connect();
+  console.log(`inside the db func: ${serverSideInstances}`);
 
   try {
-    await pool.connect();
+    await client.query('BEGIN');
+
     for (const instance of serverSideInstances) {
       const dbQuery = `
       INSERT INTO instances (instance_id, private_ip, public_ip)
       VALUES ($1, $2, $3)
       ON CONFLICT (instance_id) DO NOTHING`;
       const values = [instance.instanceID, instance.privateIP, instance.publicIP];
-      const res = await pool.query(dbQuery, values);
-      await pool.query('COMMIT')
+      await client.query(dbQuery, values);
     }
+
+    await client.query('COMMIT'); // Commit the transaction if all is successful
+    console.log('Insert to DB done');
   } catch (err) {
-    if (err instanceof Error) {
-      await pool.query('ROLLBACK')
-      console.error("Error inserting data:", err.stack);
-    } else {
-      console.log("Unexpected error");
-    }
+    await client.query('ROLLBACK'); // Roll back the transaction on any error
+    console.error("Error inserting data:", err instanceof Error ? err.stack : err);
   } finally {
-    await pool.end();
+    client.release(); // Release the client back to the pool
   }
 };
 
 export const Resources = ({
-  initialServerSideInstances,}: {
+  initialServerSideInstances }: {
   initialServerSideInstances: InitialServerSideInstance[] }) => {
   const [serverSideInstances, setServerSideInstances] = useState(
     initialServerSideInstances
@@ -109,7 +108,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const serverSideInstances = await fetchEc2Instances();
   console.log(serverSideInstances);
   await insertInstancesToDB(serverSideInstances);
-  console.log('insert to db done');
   return {
     props: { serverSideInstances },
   };
