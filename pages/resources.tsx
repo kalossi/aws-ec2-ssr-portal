@@ -7,6 +7,7 @@ import {
 } from "../utils/server_side_utils";
 import { useState, useEffect } from "react";
 import Header from "@/components/header";
+import Time from "./time";
 
 const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstance[]) => {
   const { Client } = require('pg');
@@ -85,11 +86,13 @@ export const Resources = ({
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
       <Header />
+      <Time />
       <h1>No instances available.</h1>
     </div>
   ) : (
     <div>
       <Header />
+      <Time />
       <h1>Server-Side Instances:</h1>
       <table>
         <thead>
