@@ -14,7 +14,7 @@ const Time: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           const epochTime = data.epoch; // Assuming the epoch time is in the response
-          setTime(new Date(epochTime * 1000).toLocaleTimeString()); // Convert epoch to readable time
+          setTime(new Date(epochTime * 1000).toLocaleTimeString("en-GB")); // Convert epoch to readable time
         } else {
           console.error("Failed to fetch time");
         }

@@ -7,6 +7,7 @@ let latestEpochTime: number | null = null;
 // Arrow function for the handler
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
+    console.log("REQ: ", req.method, req.body);
     const { epoch } = req.body;
 
     // Check if the received data is valid
