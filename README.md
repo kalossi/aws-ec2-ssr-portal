@@ -60,7 +60,7 @@ npm install pg
 ```
 services:
   db:
-    image: postgres
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_USER: pg
