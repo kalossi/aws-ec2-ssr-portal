@@ -56,7 +56,7 @@ export const Resources = ({
   //starts a web socket connection when the serverSideInstances change
   useEffect(() => {
     //establish WebSocket server connection ("creates an instance of a class") - Global object in browser enviroment
-    const ws = new WebSocket("ws://localhost:8081");
+    const ws = new WebSocket("ws://localhost:8085");
     //triggers when message from server is received (with interval - see ../utils/server_side_utils)
     ws.onmessage = (event) => {
       //received message event.data is string but maybe this is better for consistency
