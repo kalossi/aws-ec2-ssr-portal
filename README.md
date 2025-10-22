@@ -102,7 +102,7 @@ services:
       # Expose browser debugging port (optional)
       - "9222:9222"
       # Expose an optional live report server if you use one
-      - "8080:8080"
+      - "8082:8082"
     command: >
       bash -c "
         rfbrowser init && 
