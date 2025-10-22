@@ -1,8 +1,15 @@
 *** Settings ***
 Library           Browser
 
+***Variables***
+${HEADLESS}   true
+
 *** Test Cases ***
 Open Example Page
-    New Browser    headless=${ROBOT_HEADLESS}
+    # Open browser in headless mode
+    New Browser    headless=${HEADLESS}
     New Page       https://example.com
-    Get Title      Should Be Equal    Example Domain
+    # Check title
+    ${title}=      Get Title
+    Should Be Equal    ${title}    Example Domain
+    Close Browser
