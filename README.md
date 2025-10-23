@@ -113,3 +113,10 @@ Usage example:
 ```
 docker compose -f robotfw-docker-compose.yml run --rm robot
 ```
+## Folder structure for tests:
+robot-project/
+│
+├── docker-compose.yml
+├── tests/
+│   └── example_test.robot
+└── results/
