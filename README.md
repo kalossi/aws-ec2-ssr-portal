@@ -114,6 +114,7 @@ Usage example:
 docker compose -f robotfw-docker-compose.yml run --rm robot
 ```
 ## Folder structure for tests:
+```text
 robot-project/
 │
 ├── docker-compose.yml
