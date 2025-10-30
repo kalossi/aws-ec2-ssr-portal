@@ -25,8 +25,7 @@ jobs:
       - name: Run Robot Framework tests
         run: # |
           # docker compose -f robotfw-docker-compose.yml up --exit-code-from robot
-          rfbrowser init
-          robot --outputdir results tests
+          rfbrowser init && robot --outputdir results tests
 
       - name: Upload Robot results
         if: always()
