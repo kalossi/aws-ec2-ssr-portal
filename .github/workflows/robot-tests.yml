@@ -22,7 +22,7 @@ jobs:
 
       - name: Run Robot Framework tests
         run: |
-          docker compose -f robotfw-docker.compose.yml up --exit-code-from robot
+          docker compose -f robotfw-docker-compose.yml up --exit-code-from robot
 
       - name: Upload Robot results
         if: always()
