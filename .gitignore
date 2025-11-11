@@ -4,3 +4,5 @@ public/
 .eslint*
 pg*
 .env*
+dist/
+scripts/
