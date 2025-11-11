@@ -12,13 +12,20 @@ export interface InitialServerSideInstance {
 //invoke instance so that you can use it in many places
 const wss = new WebSocketServer({port: 8081});
 
+// keep last broadcast payload to avoid sending unchanged data
+let lastBroadcastPayload = '';
+
 // on initial render - better to split these two and they also serve a different scenario, although using the same fetch
 const startWSServer = () => {
   wss.on('connection', async (ws: WebSocket) => {
 
     const instances = await fetchEc2Instances();
     //sent as string
-    ws.send(JSON.stringify(instances));
+    const message = JSON.stringify(instances);
+    ws.send(message);
+    // update lastBroadcastPayload so subsequent broadcasts know current state
+    lastBroadcastPayload = message;
+
     ws.on('close', () => {
       console.log('web socket client disconnected')
     })
@@ -27,9 +34,15 @@ const startWSServer = () => {
 
 //broadcast to all the clients - called with a interval again and again
 const broadcastUpdates = async () => {
+  // don't make AWS calls if no clients connected
+  if (wss.clients.size === 0) return;
+
   const instances = await fetchEc2Instances();
   //again, as string
   const message = JSON.stringify(instances);
+  // only broadcast when something changed
+  if (message === lastBroadcastPayload) return;
+  lastBroadcastPayload = message;
   //array of clients, objects
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
