@@ -84,3 +84,40 @@ services:
 volumes:
   pg_data_volume:
 ```
+## Robot framework uses this example compose file
+```
+services:
+  robot:
+    image: marketsquare/robotframework-browser:latest
+    container_name: robot_framework
+    working_dir: /opt/robot
+    volumes:
+      - ./tests:/opt/robot/tests
+      - ./results:/opt/robot/results
+    environment:
+      - TZ=UTC
+      # Optional: set headless=false to see browser during tests (requires port exposure)
+      - ROBOT_HEADLESS=true
+    ports:
+      # Expose browser debugging port (optional)
+      - "9222:9222"
+      # Expose an optional live report server if you use one
+      - "8082:8082"
+    command: >
+      bash -c "
+        rfbrowser init && 
+        robot --outputdir results tests
+      "
+```
+Usage example:
+```
+docker compose -f robotfw-docker-compose.yml run --rm robot
+```
+## Folder structure for tests:
+```text
+robot-project/
+│
+├── docker-compose.yml
+├── tests/
+│   └── example_test.robot
+└── results/

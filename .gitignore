@@ -6,3 +6,4 @@ pg*
 .env*
 dist/
 scripts/
+test*
