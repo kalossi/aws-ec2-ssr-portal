@@ -4,3 +4,4 @@ public/
 .eslint*
 pg*
 .env*
+test*
