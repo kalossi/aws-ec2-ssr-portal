@@ -1,5 +1,7 @@
 //.utils/server_side_utils.tsx
-import AWS from 'aws-sdk';
+import fs from 'fs';
+import path from 'path';
+import * as AWS from 'aws-sdk';
 //in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
 
@@ -38,6 +40,18 @@ const broadcastUpdates = async () => {
   });
 }
 
+const MOCK_FILE = path.resolve(process.cwd(), 'tests', 'mock-ec2.json');
+
+const readMockInstances = async (): Promise<InitialServerSideInstance[]> => {
+  try {
+    const raw = await fs.promises.readFile(MOCK_FILE, 'utf8');
+    return JSON.parse(raw) as InitialServerSideInstance[];
+  } catch (err: any) {
+    console.warn('Could not read mock EC2 file:', MOCK_FILE, (err && err.message) || err);
+    return [];
+  }
+};
+
 //only seen on server side
 //console.log("Attempting with the following credentials:");
 //console.log("accessKeyId:", process.env.AWS_SDK_ID);
@@ -52,6 +66,12 @@ AWS.config.update({
 const ec2 = new AWS.EC2();
 
 export const fetchEc2Instances = async () => {
+   // return mock data if enabled
+  if (process.env.MOCK_EC2 === 'true') {
+    console.log('MOCK_EC2=true — returning mock instances from', MOCK_FILE);
+    return readMockInstances();
+  }
+
   try {
     // console.log("fetching promise...");
     const data = await ec2.describeInstances().promise();
@@ -67,8 +87,8 @@ export const fetchEc2Instances = async () => {
       }
     ) || [];
     return instances;
-  } catch (error) {
-    console.log("error fetching ec2...");
+  } catch (error: any) {
+    console.log("error fetching ec2...", (error && error.message) || error);
     throw error;
   }
 };

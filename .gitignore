@@ -4,4 +4,6 @@ public/
 .eslint*
 pg*
 .env*
-test*
+scripts/
+dist/
+*old*

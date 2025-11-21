@@ -1,0 +1,16 @@
+[
+  {
+    "instanceID": "i-0abcdef1234567890",
+    "name": "test-instance-1",
+    "state": "running",
+    "publicIP": "3.120.45.67",
+    "privateIP": "10.0.1.12"
+  },
+  {
+    "instanceID": "i-0abcdef9876543210",
+    "name": "test-instance-2",
+    "state": "stopped",
+    "publicIP": "N/A",
+    "privateIP": "10.0.1.13"
+  }
+]
