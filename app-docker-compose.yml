@@ -1,0 +1,16 @@
+services:
+  app:
+    image: node:20
+    container_name: ssr_next_app
+    working_dir: /work
+    volumes:
+      - ./:/work
+    environment:
+      - MOCK_EC2=true
+      - PORT=3000
+      - NODE_ENV=production
+    depends_on:
+      - db
+    command: bash -lc "npm ci --omit=dev && npm run build && npm run start"
+    ports:
+      - "3000:3000"

@@ -1,65 +1,202 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.2 (Python 3.12.3 on linux)" generated="2025-10-22T15:19:00.383672" rpa="false" schemaversion="5">
+<robot generator="Robot 7.3.2 (Python 3.12.3 on linux)" generated="2025-11-21T14:45:32.042709" rpa="false" schemaversion="5">
 <suite id="s1" name="Tests" source="/opt/robot/tests">
-<suite id="s1-s1" name="Example-Test" source="/opt/robot/tests/example-test.robot">
-<test id="s1-s1-t1" name="Open Example Page" line="8">
+<suite id="s1-s1" name="Browser-Tests" source="/opt/robot/tests/browser-tests.robot">
+<test id="s1-s1-t1" name="Open Example Page" line="9">
 <kw name="New Browser" owner="Browser">
-<msg time="2025-10-22T15:19:00.722471" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/c075191b-5ef0-40b7-ba74-7f02366ba2eb"}</msg>
-<msg time="2025-10-22T15:19:00.728791" level="INFO">Starting Browser process /home/pwuser/.venv/lib/python3.12/site-packages/Browser/wrapper/index.js using at 127.0.0.1:35405</msg>
-<msg time="2025-10-22T15:19:01.881367" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/c075191b-5ef0-40b7-ba74-7f02366ba2eb"}</msg>
+<msg time="2025-11-21T14:45:34.217585" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/5dc397f0-c6ba-4b39-b4fa-508482fd8be5"}</msg>
+<msg time="2025-11-21T14:45:34.335991" level="INFO">Starting Browser process /home/pwuser/.venv/lib/python3.12/site-packages/Browser/wrapper/index.js using at 127.0.0.1:55447</msg>
+<msg time="2025-11-21T14:45:37.068267" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/5dc397f0-c6ba-4b39-b4fa-508482fd8be5"}</msg>
 <arg>headless=${HEADLESS}</arg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Create a new playwright Browser with specified options.</doc>
-<status status="PASS" start="2025-10-22T15:19:00.720930" elapsed="1.160749"/>
+<status status="PASS" start="2025-11-21T14:45:34.205455" elapsed="2.863170"/>
 </kw>
 <kw name="New Page" owner="Browser">
-<msg time="2025-10-22T15:19:02.574824" level="INFO">Successfully initialized new page object and opened url: https://example.com</msg>
-<msg time="2025-10-22T15:19:02.574974" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
+<msg time="2025-11-21T14:45:38.510644" level="INFO">Successfully initialized new page object and opened url: https://example.com</msg>
+<msg time="2025-11-21T14:45:38.510769" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
 <arg>https://example.com</arg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Open a new Page.</doc>
-<status status="PASS" start="2025-10-22T15:19:01.882530" elapsed="0.692860"/>
+<status status="PASS" start="2025-11-21T14:45:37.069014" elapsed="1.442097"/>
 </kw>
 <kw name="Get Title" owner="Browser">
-<msg time="2025-10-22T15:19:02.596178" level="INFO">Title: 'Example Domain'</msg>
-<msg time="2025-10-22T15:19:02.596407" level="INFO">${title} = Example Domain</msg>
+<msg time="2025-11-21T14:45:38.625433" level="INFO">Title: 'Example Domain'</msg>
+<msg time="2025-11-21T14:45:38.625728" level="INFO">${title} = Example Domain</msg>
 <var>${title}</var>
 <tag>Assertion</tag>
 <tag>Getter</tag>
 <tag>PageContent</tag>
 <doc>Returns the title of the current page.</doc>
-<status status="PASS" start="2025-10-22T15:19:02.575928" elapsed="0.020527"/>
+<status status="PASS" start="2025-11-21T14:45:38.511433" elapsed="0.114358"/>
 </kw>
 <kw name="Should Be Equal" owner="BuiltIn">
 <arg>${title}</arg>
 <arg>Example Domain</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-10-22T15:19:02.596951" elapsed="0.001379"/>
+<status status="PASS" start="2025-11-21T14:45:38.637488" elapsed="0.067786"/>
 </kw>
 <kw name="Close Browser" owner="Browser">
-<msg time="2025-10-22T15:19:02.674750" level="INFO">Closed browser</msg>
+<msg time="2025-11-21T14:45:39.118034" level="INFO">Closed browser</msg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Closes the current browser.</doc>
-<status status="PASS" start="2025-10-22T15:19:02.598762" elapsed="0.076172"/>
+<status status="PASS" start="2025-11-21T14:45:38.705598" elapsed="0.412702"/>
 </kw>
-<status status="PASS" start="2025-10-22T15:19:00.719183" elapsed="1.956082"/>
+<status status="PASS" start="2025-11-21T14:45:34.203213" elapsed="4.915517"/>
 </test>
-<status status="PASS" start="2025-10-22T15:19:00.431024" elapsed="2.258959"/>
+<test id="s1-s1-t2" name="App Smoke — Resources Page Loads" line="18">
+<kw name="New Browser" owner="Browser">
+<msg time="2025-11-21T14:45:39.751077" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/04222e92-410a-4cac-bee4-70adeef771a9"}</msg>
+<msg time="2025-11-21T14:45:40.394873" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/04222e92-410a-4cac-bee4-70adeef771a9"}</msg>
+<arg>headless=${HEADLESS}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2025-11-21T14:45:39.715865" elapsed="0.679283"/>
+</kw>
+<kw name="New Page" owner="Browser">
+<msg time="2025-11-21T14:45:43.296518" level="INFO">Keyword 'Take Screenshot  fail-screenshot-{index}' could not be run on failure:
+Error: Tried to take screenshot, but no page was open.</msg>
+<msg time="2025-11-21T14:45:43.296668" level="INFO">See also file:///opt/robot/results/playwright-log.txt for additional details.</msg>
+<msg time="2025-11-21T14:45:43.297348" level="FAIL">Error: page.goto: net::ERR_EMPTY_RESPONSE at http://host.docker.internal:3000/resources
+Call log:
+  - navigating to "http://host.docker.internal:3000/resources", waiting until "load"
+</msg>
+<arg>${BASE}/resources</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="FAIL" start="2025-11-21T14:45:40.395596" elapsed="2.906008">Error: page.goto: net::ERR_EMPTY_RESPONSE at http://host.docker.internal:3000/resources
+Call log:
+  - navigating to "http://host.docker.internal:3000/resources", waiting until "load"
+</status>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>css=body</arg>
+<arg>visible</arg>
+<arg>timeout=13s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:43.310677" elapsed="0.203455"/>
+</kw>
+<kw name="Get Title" owner="Browser">
+<var>${title}</var>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the title of the current page.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:43.514502" elapsed="0.099959"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${title}</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:43.614867" elapsed="0.104130"/>
+</kw>
+<kw name="Capture Page Screenshot">
+<status status="NOT RUN" start="2025-11-21T14:45:43.719364" elapsed="0.097284"/>
+</kw>
+<kw name="Close Browser" owner="Browser">
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:43.816961" elapsed="0.041067"/>
+</kw>
+<msg time="2025-11-21T14:45:43.891382" level="INFO">Switching context to context=40b566e0-a021-4546-ba56-721ded37d9e3 in CURRENT</msg>
+<msg time="2025-11-21T14:45:43.908845" level="INFO">Successfully changed active context: context=40b566e0-a021-4546-ba56-721ded37d9e3</msg>
+<msg time="2025-11-21T14:45:43.915305" level="INFO">Successfully closed Context</msg>
+<status status="FAIL" start="2025-11-21T14:45:39.709749" elapsed="4.148752">Error: page.goto: net::ERR_EMPTY_RESPONSE at http://host.docker.internal:3000/resources
+Call log:
+  - navigating to "http://host.docker.internal:3000/resources", waiting until "load"
+</status>
+</test>
+<test id="s1-s1-t3" name="Resources Table Structure" line="27">
+<kw name="New Browser" owner="Browser">
+<msg time="2025-11-21T14:45:43.960482" level="INFO">Switching browser to browser=f5045792-e8fc-43ad-a0bd-e54ee0a151b7</msg>
+<msg time="2025-11-21T14:45:43.964877" level="INFO">Successfully changed active browser: browser=f5045792-e8fc-43ad-a0bd-e54ee0a151b7</msg>
+<msg time="2025-11-21T14:45:43.965136" level="INFO">Reusing existing browser with id: browser=f5045792-e8fc-43ad-a0bd-e54ee0a151b7</msg>
+<arg>headless=${HEADLESS}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2025-11-21T14:45:43.926000" elapsed="0.039278"/>
+</kw>
+<kw name="New Page" owner="Browser">
+<msg time="2025-11-21T14:45:48.328105" level="INFO">Keyword 'Take Screenshot  fail-screenshot-{index}' could not be run on failure:
+Error: Tried to take screenshot, but no page was open.</msg>
+<msg time="2025-11-21T14:45:48.328376" level="INFO">See also file:///opt/robot/results/playwright-log.txt for additional details.</msg>
+<msg time="2025-11-21T14:45:48.328632" level="FAIL">Error: page.goto: net::ERR_EMPTY_RESPONSE at http://host.docker.internal:3000/resources
+Call log:
+  - navigating to "http://host.docker.internal:3000/resources", waiting until "load"
+</msg>
+<arg>${BASE}/resources</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="FAIL" start="2025-11-21T14:45:43.965654" elapsed="4.364708">Error: page.goto: net::ERR_EMPTY_RESPONSE at http://host.docker.internal:3000/resources
+Call log:
+  - navigating to "http://host.docker.internal:3000/resources", waiting until "load"
+</status>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>css=table, css=.no-instances</arg>
+<arg>visible</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:48.683288" elapsed="0.384561"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<var>${has_table}</var>
+<arg>Element Should Be Visible</arg>
+<arg>css=table</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:49.068329" elapsed="0.185228"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${has_table}</arg>
+<arg>Check Table Headers And Rows</arg>
+<arg>ELSE</arg>
+<arg>Log</arg>
+<arg>"No table present — page shows no instances or different markup"</arg>
+<arg>WARN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:49.253999" elapsed="0.305613"/>
+</kw>
+<kw name="Capture Page Screenshot">
+<status status="NOT RUN" start="2025-11-21T14:45:49.560089" elapsed="0.320393"/>
+</kw>
+<kw name="Close Browser" owner="Browser">
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="NOT RUN" start="2025-11-21T14:45:49.880839" elapsed="0.477240"/>
+</kw>
+<msg time="2025-11-21T14:45:50.379236" level="INFO">Switching context to context=e9e4ed91-f2e2-4ada-8f49-a23c7ccbeaa1 in CURRENT</msg>
+<msg time="2025-11-21T14:45:50.397810" level="INFO">Successfully changed active context: context=e9e4ed91-f2e2-4ada-8f49-a23c7ccbeaa1</msg>
+<msg time="2025-11-21T14:45:50.404510" level="INFO">Successfully closed Context</msg>
+<status status="FAIL" start="2025-11-21T14:45:43.916163" elapsed="6.442429">Error: page.goto: net::ERR_EMPTY_RESPONSE at http://host.docker.internal:3000/resources
+Call log:
+  - navigating to "http://host.docker.internal:3000/resources", waiting until "load"
+</status>
+</test>
+<status status="FAIL" start="2025-11-21T14:45:32.221052" elapsed="18.184639"/>
 </suite>
-<status status="PASS" start="2025-10-22T15:19:00.400592" elapsed="2.300659"/>
+<status status="FAIL" start="2025-11-21T14:45:32.064671" elapsed="18.356763"/>
 </suite>
 <statistics>
 <total>
-<stat pass="1" fail="0" skip="0">All Tests</stat>
+<stat pass="1" fail="2" skip="0">All Tests</stat>
 </total>
 <tag>
 </tag>
 <suite>
-<stat name="Tests" id="s1" pass="1" fail="0" skip="0">Tests</stat>
-<stat name="Example-Test" id="s1-s1" pass="1" fail="0" skip="0">Tests.Example-Test</stat>
+<stat name="Tests" id="s1" pass="1" fail="2" skip="0">Tests</stat>
+<stat name="Browser-Tests" id="s1-s1" pass="1" fail="2" skip="0">Tests.Browser-Tests</stat>
 </suite>
 </statistics>
 <errors>

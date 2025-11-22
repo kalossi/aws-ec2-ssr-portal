@@ -7,16 +7,20 @@ services:
       - ./tests:/opt/robot/tests
       - ./results:/opt/robot/results
     environment:
-      - TZ=UTC
+      - TZ=FI
       # Optional: set headless=false to see browser during tests (requires port exposure)
       - ROBOT_HEADLESS=true
+      - MOCK_EC2=true
     ports:
       # Expose browser debugging port (optional)
       - "9222:9222"
       # Expose an optional live report server if you use one
       - "8082:8082"
+    depends_on:
+      - app
     command: >
       bash -c "
-        rfbrowser init && 
-        robot --outputdir results tests
+        rfbrowser init &&
+        # pass BASE as robot variable so tests use host.docker.internal to reach app on host
+        robot --variable BASE:http://host.docker.internal:3000 --outputdir results tests
       "
