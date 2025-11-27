@@ -9,8 +9,21 @@ services:
       - MOCK_EC2=true
       - PORT=3000
       - NODE_ENV=production
+      - PG_HOST=db
+      - PG_USER=pg
+      - PG_PASSWORD=test1234
+      - PG_DB=test
+      - PG_PORT=5432
+      - NEXT_PUBLIC_WS_HOST=app
+      - NEXT_PUBLIC_WS_PORT=8081
     depends_on:
       - db
+    networks:
+      - ssr_net
     command: bash -lc "npm ci --omit=dev && npm run build && npm run start"
     ports:
       - "3000:3000"
+networks:
+  ssr_net:
+    external: true
+    name: ssr_next_network

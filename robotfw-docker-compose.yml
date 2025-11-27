@@ -8,19 +8,26 @@ services:
       - ./results:/opt/robot/results
     environment:
       - TZ=FI
-      # Optional: set headless=false to see browser during tests (requires port exposure)
       - ROBOT_HEADLESS=true
       - MOCK_EC2=true
     ports:
-      # Expose browser debugging port (optional)
       - "9222:9222"
-      # Expose an optional live report server if you use one
       - "8082:8082"
     depends_on:
       - app
+    restart: unless-stopped
     command: >
       bash -c "
+        # wait for app service on the shared network
+        until curl -sSf http://app:3000/ >/dev/null; do
+          echo waiting for app...
+          sleep 2
+        done
         rfbrowser init &&
-        # pass BASE as robot variable so tests use host.docker.internal to reach app on host
-        robot --variable BASE:http://host.docker.internal:3000 --outputdir results tests
+        robot --variable BASE:http://app:3000 --outputdir results tests
       "
+    networks:
+      - ssr_net
+networks:
+  ssr_net:
+    name: ssr_next_network

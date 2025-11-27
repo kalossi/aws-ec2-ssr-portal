@@ -12,11 +12,11 @@ const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstanc
   const { Client } = require('pg');
 
   const client = new Client({
-    user: "pg",
-    host: "localhost",
-    database: "test",
-    password: "test1234",
-    port: 5432,
+    user: process.env.PG_USER ??"pg",
+    host: process.env.PG_HOST ?? "db",
+    database: process.env.PG_DB ?? "test",
+    password: process.env.PG_PASSWORD ?? "test1234",
+    port: Number(process.env.PG_PORT ?? 5432),
   });
 
   // console.log(`inside the db func: ${serverSideInstances}`);
@@ -52,8 +52,9 @@ export const Resources = ({
 
   // create WS once, don't recreate on every state change
   useEffect(() => {
-    const port = process.env.WS_PORT ?? '8081';
-    const ws = new WebSocket(`ws://localhost:${port}`);
+    const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8085';
+    const host = process.env.NEXT_PUBLIC_WS_HOST ?? 'localhost';
+    const ws = new WebSocket(`ws://${host}:${port}`);
 
     const lastPayloadRef = { current: '' } as { current: string };
 

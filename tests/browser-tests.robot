@@ -1,6 +1,11 @@
 *** Settings ***
 Library           Browser
 
+*** Keywords ***
+Open App Browser
+    Create Browser    chromium    ignore_https_errors=True    headless=True
+    New Page    ${BASE}
+
 *** Variables ***
 ${HEADLESS}       true
 ${BASE}           http://localhost:3000

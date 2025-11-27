@@ -7,19 +7,27 @@ services:
       POSTGRES_PASSWORD: test1234
       POSTGRES_DB: test
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 1s
+      test: ["CMD-SHELL", "pg_isready -U pg -d test"]
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
     ports:
       - "5432:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
+    networks:
+     - ssr_net
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - ssr_net
 volumes:
   pg_data_volume:
+networks:
+  ssr_net:
+    external: true
+    name: ssr_next_network
