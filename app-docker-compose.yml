@@ -15,7 +15,7 @@ services:
       - PG_DB=test
       - PG_PORT=5432
       - NEXT_PUBLIC_WS_HOST=app
-      - NEXT_PUBLIC_WS_PORT=8081
+      - NEXT_PUBLIC_WS_PORT=8085
     depends_on:
       - db
     networks:

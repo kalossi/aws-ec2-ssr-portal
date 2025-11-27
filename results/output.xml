@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.2 (Python 3.12.3 on linux)" generated="2025-11-27T10:01:41.710094" rpa="false" schemaversion="5">
+<robot generator="Robot 7.3.2 (Python 3.12.3 on linux)" generated="2025-11-27T10:05:23.085281" rpa="false" schemaversion="5">
 <suite id="s1" name="Tests" source="/opt/robot/tests">
 <suite id="s1-s1" name="Browser-Tests" source="/opt/robot/tests/browser-tests.robot">
 <test id="s1-s1-t1" name="Open Example Page" line="14">
 <kw name="New Browser" owner="Browser">
-<msg time="2025-11-27T10:01:41.988453" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/2e990c42-808e-4110-b308-90b3aa104daf"}</msg>
-<msg time="2025-11-27T10:01:41.996572" level="INFO">Starting Browser process /home/pwuser/.venv/lib/python3.12/site-packages/Browser/wrapper/index.js using at 127.0.0.1:42699</msg>
-<msg time="2025-11-27T10:01:42.893024" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/2e990c42-808e-4110-b308-90b3aa104daf"}</msg>
+<msg time="2025-11-27T10:05:25.456159" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/ccd6542d-e5bb-40e1-b893-a3bda35d8bc1"}</msg>
+<msg time="2025-11-27T10:05:25.495817" level="INFO">Starting Browser process /home/pwuser/.venv/lib/python3.12/site-packages/Browser/wrapper/index.js using at 127.0.0.1:58897</msg>
+<msg time="2025-11-27T10:05:28.146114" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/ccd6542d-e5bb-40e1-b893-a3bda35d8bc1"}</msg>
 <arg>headless=${HEADLESS}</arg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Create a new playwright Browser with specified options.</doc>
-<status status="PASS" start="2025-11-27T10:01:41.981890" elapsed="0.911470"/>
+<status status="PASS" start="2025-11-27T10:05:25.410376" elapsed="2.736044"/>
 </kw>
 <kw name="New Page" owner="Browser">
-<msg time="2025-11-27T10:01:43.451899" level="INFO">Successfully initialized new page object and opened url: https://example.com</msg>
-<msg time="2025-11-27T10:01:43.452057" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
+<msg time="2025-11-27T10:05:28.809469" level="INFO">Successfully initialized new page object and opened url: https://example.com</msg>
+<msg time="2025-11-27T10:05:28.809609" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
 <arg>https://example.com</arg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Open a new Page.</doc>
-<status status="PASS" start="2025-11-27T10:01:42.893740" elapsed="0.558667"/>
+<status status="PASS" start="2025-11-27T10:05:28.146807" elapsed="0.663086"/>
 </kw>
 <kw name="Get Title" owner="Browser">
-<msg time="2025-11-27T10:01:43.600140" level="INFO">Title: 'Example Domain'</msg>
-<msg time="2025-11-27T10:01:43.600380" level="INFO">${title} = Example Domain</msg>
+<msg time="2025-11-27T10:05:28.853261" level="INFO">Title: 'Example Domain'</msg>
+<msg time="2025-11-27T10:05:28.853515" level="INFO">${title} = Example Domain</msg>
 <var>${title}</var>
 <tag>Assertion</tag>
 <tag>Getter</tag>
 <tag>PageContent</tag>
 <doc>Returns the title of the current page.</doc>
-<status status="PASS" start="2025-11-27T10:01:43.452960" elapsed="0.147473"/>
+<status status="PASS" start="2025-11-27T10:05:28.813042" elapsed="0.040545"/>
 </kw>
 <kw name="Should Be Equal" owner="BuiltIn">
 <arg>${title}</arg>
 <arg>Example Domain</arg>
 <doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-11-27T10:01:43.600697" elapsed="0.110920"/>
+<status status="PASS" start="2025-11-27T10:05:28.853889" elapsed="0.014483"/>
 </kw>
 <kw name="Close Browser" owner="Browser">
-<msg time="2025-11-27T10:01:43.828561" level="INFO">Closed browser</msg>
+<msg time="2025-11-27T10:05:28.978956" level="INFO">Closed browser</msg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Closes the current browser.</doc>
-<status status="PASS" start="2025-11-27T10:01:43.711901" elapsed="0.116937"/>
+<status status="PASS" start="2025-11-27T10:05:28.868693" elapsed="0.110543"/>
 </kw>
-<status status="PASS" start="2025-11-27T10:01:41.979878" elapsed="1.849237"/>
+<status status="PASS" start="2025-11-27T10:05:25.408477" elapsed="3.571047"/>
 </test>
 <test id="s1-s1-t2" name="Simple Resources Smoke" line="21">
 <kw name="New Browser" owner="Browser">
-<msg time="2025-11-27T10:01:43.897590" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/375e0092-eb28-4f12-be48-7d0bf61da0c3"}</msg>
-<msg time="2025-11-27T10:01:44.084965" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/375e0092-eb28-4f12-be48-7d0bf61da0c3"}</msg>
+<msg time="2025-11-27T10:05:29.030636" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/opt/robot/results/browser/traces/temp/b2cba276-5aa2-48c9-b368-d387dcd6f949"}</msg>
+<msg time="2025-11-27T10:05:29.242671" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/opt/robot/results/browser/traces/temp/b2cba276-5aa2-48c9-b368-d387dcd6f949"}</msg>
 <arg>headless=${HEADLESS}</arg>
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Create a new playwright Browser with specified options.</doc>
-<status status="PASS" start="2025-11-27T10:01:43.891895" elapsed="0.193364"/>
+<status status="PASS" start="2025-11-27T10:05:29.025879" elapsed="0.217045"/>
 </kw>
 <kw name="New Page" owner="Browser">
-<msg time="2025-11-27T10:01:44.323711" level="INFO">Keyword 'Take Screenshot  fail-screenshot-{index}' could not be run on failure:
+<msg time="2025-11-27T10:05:29.692024" level="INFO">Keyword 'Take Screenshot  fail-screenshot-{index}' could not be run on failure:
 Error: Tried to take screenshot, but no page was open.</msg>
-<msg time="2025-11-27T10:01:44.323832" level="INFO">See also file:///opt/robot/results/playwright-log.txt for additional details.</msg>
-<msg time="2025-11-27T10:01:44.324412" level="FAIL">Error: page.goto: net::ERR_SSL_PROTOCOL_ERROR at http://app:3000/resources
+<msg time="2025-11-27T10:05:29.692165" level="INFO">See also file:///opt/robot/results/playwright-log.txt for additional details.</msg>
+<msg time="2025-11-27T10:05:29.692855" level="FAIL">Error: page.goto: net::ERR_SSL_PROTOCOL_ERROR at http://app:3000/resources
 Call log:
   - navigating to "http://app:3000/resources", waiting until "load"
 </msg>
@@ -69,7 +69,7 @@ Call log:
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Open a new Page.</doc>
-<status status="FAIL" start="2025-11-27T10:01:44.085584" elapsed="0.241713">Error: page.goto: net::ERR_SSL_PROTOCOL_ERROR at http://app:3000/resources
+<status status="FAIL" start="2025-11-27T10:05:29.243221" elapsed="0.453716">Error: page.goto: net::ERR_SSL_PROTOCOL_ERROR at http://app:3000/resources
 Call log:
   - navigating to "http://app:3000/resources", waiting until "load"
 </status>
@@ -81,7 +81,7 @@ Call log:
 <tag>PageContent</tag>
 <tag>Wait</tag>
 <doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
-<status status="NOT RUN" start="2025-11-27T10:01:44.327575" elapsed="0.000786"/>
+<status status="NOT RUN" start="2025-11-27T10:05:29.697339" elapsed="0.011868"/>
 </kw>
 <kw name="Get Page Source" owner="Browser">
 <var>${src}</var>
@@ -89,7 +89,7 @@ Call log:
 <tag>Getter</tag>
 <tag>PageContent</tag>
 <doc>Gets pages HTML source as a string.</doc>
-<status status="NOT RUN" start="2025-11-27T10:01:44.328705" elapsed="0.000818"/>
+<status status="NOT RUN" start="2025-11-27T10:05:29.709630" elapsed="0.001545"/>
 </kw>
 <kw name="Run Keyword And Return Status" owner="BuiltIn">
 <var>${has_table}</var>
@@ -97,7 +97,7 @@ Call log:
 <arg>${src}</arg>
 <arg>Instance ID</arg>
 <doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
-<status status="NOT RUN" start="2025-11-27T10:01:44.329779" elapsed="0.000640"/>
+<status status="NOT RUN" start="2025-11-27T10:05:29.711777" elapsed="0.001153"/>
 </kw>
 <kw name="Run Keyword If" owner="BuiltIn">
 <arg>${has_table}</arg>
@@ -108,31 +108,31 @@ Call log:
 <arg>${src}</arg>
 <arg>No instances</arg>
 <doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
-<status status="NOT RUN" start="2025-11-27T10:01:44.330618" elapsed="0.000608"/>
+<status status="NOT RUN" start="2025-11-27T10:05:29.713316" elapsed="0.001140"/>
 </kw>
 <kw name="Take Screenshot" owner="Browser">
 <tag>PageContent</tag>
 <doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
-<status status="NOT RUN" start="2025-11-27T10:01:44.331423" elapsed="0.000728"/>
+<status status="NOT RUN" start="2025-11-27T10:05:29.714844" elapsed="0.007340"/>
 </kw>
 <kw name="Close Browser" owner="Browser">
 <tag>BrowserControl</tag>
 <tag>Setter</tag>
 <doc>Closes the current browser.</doc>
-<status status="NOT RUN" start="2025-11-27T10:01:44.332450" elapsed="0.001882"/>
+<status status="NOT RUN" start="2025-11-27T10:05:29.722523" elapsed="0.001210"/>
 </kw>
-<msg time="2025-11-27T10:01:44.350727" level="INFO">Switching context to context=6df3776b-a339-4619-a27b-f38cce5bf4cd in CURRENT</msg>
-<msg time="2025-11-27T10:01:44.356564" level="INFO">Successfully changed active context: context=6df3776b-a339-4619-a27b-f38cce5bf4cd</msg>
-<msg time="2025-11-27T10:01:44.362256" level="INFO">Successfully closed Context</msg>
+<msg time="2025-11-27T10:05:29.744462" level="INFO">Switching context to context=7f295f5a-d9c7-4d44-9807-873db894eb6a in CURRENT</msg>
+<msg time="2025-11-27T10:05:29.760695" level="INFO">Successfully changed active context: context=7f295f5a-d9c7-4d44-9807-873db894eb6a</msg>
+<msg time="2025-11-27T10:05:29.783267" level="INFO">Successfully closed Context</msg>
 <doc>Basic smoke: page loads and either shows table headers or "No instances"</doc>
-<status status="FAIL" start="2025-11-27T10:01:43.879800" elapsed="0.454961">Error: page.goto: net::ERR_SSL_PROTOCOL_ERROR at http://app:3000/resources
+<status status="FAIL" start="2025-11-27T10:05:29.019332" elapsed="0.704812">Error: page.goto: net::ERR_SSL_PROTOCOL_ERROR at http://app:3000/resources
 Call log:
   - navigating to "http://app:3000/resources", waiting until "load"
 </status>
 </test>
-<status status="FAIL" start="2025-11-27T10:01:41.760492" elapsed="2.602839"/>
+<status status="FAIL" start="2025-11-27T10:05:23.169778" elapsed="6.614578"/>
 </suite>
-<status status="FAIL" start="2025-11-27T10:01:41.718664" elapsed="2.656844"/>
+<status status="FAIL" start="2025-11-27T10:05:23.089453" elapsed="6.708680"/>
 </suite>
 <statistics>
 <total>
