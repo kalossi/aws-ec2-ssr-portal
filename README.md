@@ -54,8 +54,6 @@ npm install --save-dev @types/ws
 npm install pg
 ```
 
-## TODO:
-- What next? What could _it_ do? :)
 ## The db used in this example is initiated using following yaml for Docker:
 ```
 services:
