@@ -55,7 +55,7 @@ export const Resources = ({
 
   // create WS once, don't recreate on every state change
   useEffect(() => {
-    const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8081';
+    const port = process.env.WS_PORT ?? '8081';
     const ws = new WebSocket(`ws://localhost:${port}`);
 
     const lastPayloadRef = { current: '' } as { current: string };
@@ -90,7 +90,7 @@ export const Resources = ({
         <thead>
           <tr>
             <th>Instance ID</th>
-            <th>State</th>
+            <th>Name</th>
             <th>Public IP</th>
             <th>Private IP</th>
           </tr>
