@@ -50,37 +50,32 @@ export const Resources = ({
   initialServerSideInstances: InitialServerSideInstance[];
 }) => {
   const [serverSideInstances, setServerSideInstances] = useState(
-    initialServerSideInstances
+    initialServerSideInstances || []
   );
 
-  //starts a web socket connection when the serverSideInstances change
+  // create WS once, don't recreate on every state change
   useEffect(() => {
-    //establish WebSocket server connection ("creates an instance of a class") - Global object in browser enviroment
-    const ws = new WebSocket("ws://localhost:8085");
-    //triggers when message from server is received (with interval - see ../utils/server_side_utils)
+    const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8081';
+    const ws = new WebSocket(`ws://localhost:${port}`);
+
+    const lastPayloadRef = { current: '' } as { current: string };
+
+    ws.onopen = () => console.log('WS connected', port);
     ws.onmessage = (event) => {
-      //received message event.data is string but maybe this is better for consistency
-      const receivedInstances = JSON.parse(
-        event.data.toString()
-      ) as InitialServerSideInstance[];
-      //compare is done in string type
-      if (
-        JSON.stringify(receivedInstances) !==
-        JSON.stringify(serverSideInstances)
-      ) {
-        //if changes has happened, update the state
-        setServerSideInstances(receivedInstances);
+      try {
+        const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstance[];
+        const payload = JSON.stringify(receivedInstances);
+        if (payload !== lastPayloadRef.current) {
+          lastPayloadRef.current = payload;
+          setServerSideInstances(receivedInstances);
+        }
+      } catch (e) {
+        console.error('ws parse error', e);
       }
     };
-
-    ws.onerror = (error) => {
-      console.error(error);
-    };
-    //remember to close WebSocket connection!
-    return () => {
-      ws.close();
-    };
-  }, [serverSideInstances]);
+    ws.onerror = (err) => console.error('ws error', err);
+    return () => ws.close();
+  }, []); // run once on mount
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
@@ -116,13 +111,28 @@ export const Resources = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const serverSideInstances = await fetchEc2Instances();
-  console.log(serverSideInstances);
-  await insertInstancesToDB(serverSideInstances);
-  console.log('insert to db done');
-  return {
-    props: { serverSideInstances },
-  };
+  try {
+    const serverSideInstances = await fetchEc2Instances();
+    console.log('fetched instances length=', serverSideInstances?.length ?? 0);
+
+    // attempt to persist, but don't let DB failures break the page render
+    try {
+      await insertInstancesToDB(serverSideInstances);
+      console.log('insert to db done');
+    } catch (dbErr) {
+      console.error('insertInstancesToDB failed (logged, continuing):', dbErr);
+    }
+
+    // return prop name the component expects
+    return {
+      props: { initialServerSideInstances: serverSideInstances },
+    };
+  } catch (err: any) {
+    console.error('getServerSideProps failed fetching instances:', err && err.stack ? err.stack : err);
+    return {
+      props: { initialServerSideInstances: [] },
+    };
+  }
 };
 
 export default Resources;
