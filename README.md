@@ -125,3 +125,6 @@ robot-project/
 └── results/
 
 RESULTS ARE ONLY SAVED ON LOCALLY RUN TESTS!
+```
+# TODO:
+- Clean and comment tests, compose files, envs ...for different enviroments: Remote and local
