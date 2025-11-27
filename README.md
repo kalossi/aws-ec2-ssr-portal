@@ -55,6 +55,9 @@ npm install pg
 ```
 Usage example:
 ```
+npm run dev
+```
+```
 docker compose -f robotfw-docker-compose.yml run --rm robot
 ```
 ## Folder structure for tests:
