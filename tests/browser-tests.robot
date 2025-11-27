@@ -43,9 +43,9 @@ Check Table Or NoInstances Visible
 
 Dump Page For Debug
     ${ts}=    Get Time    result_format=%Y%m%d-%H%M%S
-    ${shot}=   Set Variable    debug-${ts}.png
+    ${shot}=    Set Variable    debug-${ts}.png
     Take Screenshot    ${shot}
-    ${html}=   Execute JavaScript    return document.documentElement.outerHTML;
+    ${html}=    Get Source
     Log To Console    ==== PAGE HTML START ====
     Log To Console    ${html}
     Log To Console    ==== PAGE HTML END ====
