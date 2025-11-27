@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Robot Framework tests
         run: |
-          robot --outputdir results tests
+           robot --variable BASE:http://localhost:${PORT} --outputdir results tests
 
       - name: Upload Robot results
         if: always()

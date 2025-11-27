@@ -7,4 +7,4 @@ pg*
 scripts/
 dist/
 *old*
-results/
+results/*
