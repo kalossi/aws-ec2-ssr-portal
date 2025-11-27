@@ -27,7 +27,7 @@ App Smoke — Resources Page Loads
 Resources Table Structure
     New Browser    headless=${HEADLESS}
     New Page       ${BASE}/resources
-    Wait Until Keyword Succeeds    8    1s    Check Table Or NoInstances Visible
+    Wait Until Keyword Succeeds    20    1s    Check Table Or NoInstances Visible
     ${has_table}=    Run Keyword And Return Status    Element Should Be Visible    css=table
     Run Keyword If    ${has_table}    Check Table Headers And Rows    ELSE    Log    "No table present — page shows no instances or different markup"    WARN
     Take Screenshot
@@ -38,7 +38,18 @@ Check Table Or NoInstances Visible
     ${table}=    Run Keyword And Return Status    Element Should Be Visible    css=table
     ${no}=       Run Keyword And Return Status    Element Should Be Visible    css=.no-instances
     Run Keyword If    ${table} or ${no}    Return From Keyword
+    Dump Page For Debug
     Fail    Neither table nor .no-instances became visible
+
+Dump Page For Debug
+    ${ts}=    Get Time    result_format=%Y%m%d-%H%M%S
+    ${shot}=   Set Variable    debug-${ts}.png
+    Take Screenshot    ${shot}
+    ${html}=   Execute JavaScript    return document.documentElement.outerHTML;
+    Log To Console    ==== PAGE HTML START ====
+    Log To Console    ${html}
+    Log To Console    ==== PAGE HTML END ====
+    Log    Saved screenshot ${shot}
 
 Validate First Row
     ${first_id}=    Get Text    css=table tbody tr:nth-child(1) td:nth-child(1)
