@@ -121,3 +121,5 @@ robot-project/
 ├── tests/
 │   └── example_test.robot
 └── results/
+
+RESULTS ARE ONLY SAVED ON LOCALLY RUN TESTS!
