@@ -120,6 +120,8 @@ robot-project/
 ├── docker-compose.yml
 ├── tests/
 │   └── example_test.robot
+│   └── browser-tests.robot
+│   └── mock-ec2.json
 └── results/
 
 RESULTS ARE ONLY SAVED ON LOCALLY RUN TESTS!
