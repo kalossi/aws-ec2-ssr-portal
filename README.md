@@ -119,8 +119,8 @@ robot-project/
 │
 ├── docker-compose.yml
 ├── tests/
-│   └── example_test.robot
-│   └── browser-tests.robot
+│   ├── example_test.robot
+│   ├── browser-tests.robot
 │   └── mock-ec2.json
 └── results/
 
