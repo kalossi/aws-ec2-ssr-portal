@@ -7,16 +7,28 @@ services:
       - ./tests:/opt/robot/tests
       - ./results:/opt/robot/results
     environment:
-      - TZ=UTC
-      # Optional: set headless=false to see browser during tests (requires port exposure)
+      - BASE=http://ssr_next_app:3000
+      - TZ=FI
       - ROBOT_HEADLESS=true
+      - MOCK_EC2=true
     ports:
-      # Expose browser debugging port (optional)
       - "9222:9222"
-      # Expose an optional live report server if you use one
       - "8082:8082"
+    depends_on:
+      - app
+    restart: unless-stopped
     command: >
-      bash -c "
-        rfbrowser init && 
-        robot --outputdir results tests
-      "
+      bash -c '
+        # wait for app service on the shared network
+        until curl -sSf http://app:3000/ >/dev/null; do
+          echo waiting for app...
+          sleep 2
+        done
+        rfbrowser init &&
+        robot --variable BASE:$$BASE --outputdir results tests
+      '
+    networks:
+      - ssr_net
+networks:
+  ssr_net:
+    name: ssr_next_network

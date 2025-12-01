@@ -4,6 +4,11 @@ public/
 .eslint*
 pg*
 .env*
-dist/
 scripts/
-test*
+dist/
+*old*
+results/
+log.html
+output.xml
+playwright-log.txt
+report.html

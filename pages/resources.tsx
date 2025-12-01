@@ -12,33 +12,30 @@ const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstanc
   const { Client } = require('pg');
 
   const client = new Client({
-    user: "pg",
-    host: "localhost",
-    database: "test",
-    password: "test1234",
-    port: 5432,
+    user: process.env.PG_USER ??"pg",
+    host: process.env.PG_HOST ?? "db",
+    database: process.env.PG_DB ?? "test",
+    password: process.env.PG_PASSWORD ?? "test1234",
+    port: Number(process.env.PG_PORT ?? 5432),
   });
 
   // console.log(`inside the db func: ${serverSideInstances}`);
 
   try {
     await client.connect();
+    await client.query('BEGIN');
     for (const instance of serverSideInstances) {
       const dbQuery = `
-      INSERT INTO instances (instance_id, private_ip, public_ip)
-      VALUES ($1, $2, $3)
-      ON CONFLICT (instance_id) DO NOTHING`;
+        INSERT INTO instances (instance_id, private_ip, public_ip)
+        VALUES ($1, $2, $3)
+        ON CONFLICT (instance_id) DO NOTHING`;
       const values = [instance.instanceID, instance.privateIP, instance.publicIP];
-      const res = await client.query(dbQuery, values);
-      await client.query('COMMIT')
+      await client.query(dbQuery, values);
     }
-  } catch (err) {
-    if (err instanceof Error) {
-      await client.query('ROLLBACK')
-      console.error("Error inserting data:", err.stack);
-    } else {
-      console.log("Unexpected error");
-    }
+    await client.query('COMMIT');
+  } catch (err: any) {
+    try { await client.query('ROLLBACK'); } catch (_) { /* ignore */ }
+    console.error("Error inserting data:", err && err.stack ? err.stack : err);
   } finally {
     await client.end();
   }
@@ -50,37 +47,33 @@ export const Resources = ({
   initialServerSideInstances: InitialServerSideInstance[];
 }) => {
   const [serverSideInstances, setServerSideInstances] = useState(
-    initialServerSideInstances
+    initialServerSideInstances || []
   );
 
-  //starts a web socket connection when the serverSideInstances change
+  // create WS once, don't recreate on every state change
   useEffect(() => {
-    //establish WebSocket server connection ("creates an instance of a class") - Global object in browser enviroment
-    const ws = new WebSocket("ws://localhost:8085");
-    //triggers when message from server is received (with interval - see ../utils/server_side_utils)
+    const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8085';
+    const host = process.env.NEXT_PUBLIC_WS_HOST ?? 'localhost';
+    const ws = new WebSocket(`ws://${host}:${port}`);
+
+    const lastPayloadRef = { current: '' } as { current: string };
+
+    ws.onopen = () => console.log('WS connected', port);
     ws.onmessage = (event) => {
-      //received message event.data is string but maybe this is better for consistency
-      const receivedInstances = JSON.parse(
-        event.data.toString()
-      ) as InitialServerSideInstance[];
-      //compare is done in string type
-      if (
-        JSON.stringify(receivedInstances) !==
-        JSON.stringify(serverSideInstances)
-      ) {
-        //if changes has happened, update the state
-        setServerSideInstances(receivedInstances);
+      try {
+        const receivedInstances = JSON.parse(event.data.toString()) as InitialServerSideInstance[];
+        const payload = JSON.stringify(receivedInstances);
+        if (payload !== lastPayloadRef.current) {
+          lastPayloadRef.current = payload;
+          setServerSideInstances(receivedInstances);
+        }
+      } catch (e) {
+        console.error('ws parse error', e);
       }
     };
-
-    ws.onerror = (error) => {
-      console.error(error);
-    };
-    //remember to close WebSocket connection!
-    return () => {
-      ws.close();
-    };
-  }, [serverSideInstances]);
+    ws.onerror = (err) => console.error('ws error', err);
+    return () => ws.close();
+  }, []); // run once on mount
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
@@ -95,7 +88,7 @@ export const Resources = ({
         <thead>
           <tr>
             <th>Instance ID</th>
-            <th>State</th>
+            <th>Name</th>
             <th>Public IP</th>
             <th>Private IP</th>
           </tr>
@@ -116,13 +109,28 @@ export const Resources = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const serverSideInstances = await fetchEc2Instances();
-  console.log(serverSideInstances);
-  await insertInstancesToDB(serverSideInstances);
-  console.log('insert to db done');
-  return {
-    props: { serverSideInstances },
-  };
+  try {
+    const serverSideInstances = await fetchEc2Instances();
+    console.log('fetched instances length=', serverSideInstances?.length ?? 0);
+
+    // attempt to persist, but don't let DB failures break the page render
+    try {
+      await insertInstancesToDB(serverSideInstances);
+      console.log('insert to db done');
+    } catch (dbErr) {
+      console.error('insertInstancesToDB failed (logged, continuing):', dbErr);
+    }
+
+    // return prop name the component expects
+    return {
+      props: { initialServerSideInstances: serverSideInstances },
+    };
+  } catch (err: any) {
+    console.error('getServerSideProps failed fetching instances:', err && err.stack ? err.stack : err);
+    return {
+      props: { initialServerSideInstances: [] },
+    };
+  }
 };
 
 export default Resources;
