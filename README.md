@@ -39,19 +39,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - I installed Docker container for the PG server testing
 
 ```
-npm install aws-sdk
-```
-```
-npm install
-```
-```
-npm install ws
+npm install aws-sdk pg ws fs
 ```
 ```
 npm install --save-dev @types/ws
-```
-```
-npm install pg
 ```
 Usage example:
 ```
@@ -64,12 +55,10 @@ docker compose -f robotfw-docker-compose.yml run --rm robot
 ```text
 robot-project/
 │
-├── docker-compose.yml
 ├── tests/
-│   ├── example_test.robot
 │   ├── browser-tests.robot
 │   └── mock-ec2.json
-└── results/
+└── results/ (untracked)
 
 RESULTS ARE ONLY SAVED ON LOCALLY RUN TESTS!
 ```
