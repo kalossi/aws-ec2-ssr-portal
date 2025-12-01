@@ -7,4 +7,8 @@ pg*
 scripts/
 dist/
 *old*
-results/*
+results/
+log.html
+output.xml
+playwright-log.txt
+report.html

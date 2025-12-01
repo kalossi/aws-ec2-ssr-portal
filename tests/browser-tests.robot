@@ -3,7 +3,7 @@ Library           Browser
 
 *** Variables ***
 ${HEADLESS}       true
-${BASE}           http://ssr_next_app:3000
+# ${BASE}           http://ssr_next_app:3000
 
 *** Test Cases ***
 Open Example Page
