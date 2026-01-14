@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "aws-sdk": "^2.1575.0",
+    "aws-sdk": "^2.1693.0",
     "glob": "^13.0.0",
     "js-yaml": "^4.1.1",
     "nanoid": "^5.1.5",
