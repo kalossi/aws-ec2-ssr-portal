@@ -39,7 +39,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - I installed Docker container for the PG server testing
 
 ```
-npm install aws-sdk pg ws fs
+npm install @aws-sdk/client-ec2 pg ws fs
 ```
 ```
 npm install --save-dev @types/ws
