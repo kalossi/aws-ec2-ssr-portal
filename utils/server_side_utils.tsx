@@ -72,15 +72,15 @@ const readMockInstances = async (): Promise<InitialServerSideInstance[]> => {
 //console.log("accessKeyId:", process.env.AWS_SDK_ID);
 //console.log("secretAccessKey:", process.env.AWS_SDK_KEY);
 
-if (!process.env.AWS_SDK_ID || !process.env.AWS_SDK_KEY) {
-  throw new Error("Missing AWS credentials in environment variables");
-}
+// if (!process.env.AWS_SDK_ID || !process.env.AWS_SDK_KEY) {
+//   throw new Error("Missing AWS credentials in environment variables");
+// }
 
 const ec2 = new EC2Client({
   region: "eu-north-1",
   credentials: {
-    accessKeyId: process.env.AWS_SDK_ID,
-    secretAccessKey: process.env.AWS_SDK_KEY,
+    accessKeyId: process.env.AWS_SDK_ID!,
+    secretAccessKey: process.env.AWS_SDK_KEY!,
   },
 });
 
