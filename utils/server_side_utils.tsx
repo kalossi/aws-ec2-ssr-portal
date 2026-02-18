@@ -1,7 +1,7 @@
 //.utils/server_side_utils.tsx
 import fs from 'fs';
 import path from 'path';
-import * as AWS from 'aws-sdk';
+import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
 //in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
 
@@ -72,13 +72,13 @@ const readMockInstances = async (): Promise<InitialServerSideInstance[]> => {
 //console.log("accessKeyId:", process.env.AWS_SDK_ID);
 //console.log("secretAccessKey:", process.env.AWS_SDK_KEY);
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_SDK_ID,
-  secretAccessKey: process.env.AWS_SDK_KEY,
+const ec2 = new EC2Client({
   region: "eu-north-1",
+  credentials: {
+    accessKeyId: process.env.AWS_SDK_ID!,
+    secretAccessKey: process.env.AWS_SDK_KEY!,
+  },
 });
-
-const ec2 = new AWS.EC2();
 
 export const fetchEc2Instances = async () => {
    // return mock data if enabled
@@ -89,7 +89,10 @@ export const fetchEc2Instances = async () => {
 
   try {
     // console.log("fetching promise...");
-    const data = await ec2.describeInstances().promise();
+    const data = await ec2.send(
+    new DescribeInstancesCommand({})
+);
+
     // console.log("fetched promise...");
 
     // ADDED: log summary of raw response so you can see why instances array is empty
