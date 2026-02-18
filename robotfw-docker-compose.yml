@@ -22,7 +22,7 @@ services:
         # wait for app service on the shared network
         until curl -sSf http://app:3000/ >/dev/null; do
           echo waiting for app...
-          sleep 2
+          sleep 5
         done
         rfbrowser init &&
         robot --variable BASE:$$BASE --outputdir results tests
