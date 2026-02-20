@@ -1,12 +1,10 @@
 //.components/resources.tsx
-//the backend
 import { GetServerSideProps } from "next";
 import {
   InitialServerSideInstance,
   fetchEc2Instances,
 } from "../utils/server_side_utils";
 import { useState, useEffect } from "react";
-import Header from "@/components/header";
 
 const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstance[]) => {
   const { Client } = require('pg');
@@ -87,6 +85,7 @@ export const Resources = ({
           <tr>
             <th>Instance ID</th>
             <th>Name</th>
+            <th>Status</th>
             <th>Public IP</th>
             <th>Private IP</th>
           </tr>

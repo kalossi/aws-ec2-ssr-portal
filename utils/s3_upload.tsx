@@ -9,14 +9,14 @@ interface S3UploadParams {
 
 // Clients
 const s3Client = new S3Client({
-  region: process.env.AWS_S3_REGION || "us-north-1",
+  region: process.env.AWS_S3_REGION || "eu-north-1",
   forcePathStyle: true, // for local testing with tools like LocalStack
 });
 
 // Functions
 export const uploadToS3 = async (params: S3UploadParams): Promise<void> => {
   const { bucket, key, content } = params;
-  console.log(`📤 Uploading to S3: bucket=${bucket}, key=${key}, region=${process.env.AWS_REGION}`);
+  console.log(`📤 Uploading to S3: bucket=${bucket}, key=${key}, region=${process.env.AWS_S3_REGION}`);
   
   const command = new PutObjectCommand({
     Bucket: bucket,
