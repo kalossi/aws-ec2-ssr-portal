@@ -9,6 +9,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 export interface InitialServerSideInstance {
   instanceID: string;
   name: string | 'N/A';
+  status: string | 'N/A';
   publicIP: string | "N/A";
   privateIP: string | "N/A";
 }
@@ -113,6 +114,7 @@ export const fetchEc2Instances = async () => {
         return reservation.Instances?.map((instance) => ({
           instanceID: instance.InstanceId || 'N/A',
           name: instance.Tags?.find(tag => tag.Key == 'Name')?.Value || "N/A",
+          status: instance.State?.Name || "N/A",
           publicIP: instance.PublicIpAddress || "N/A",
           privateIP: instance.PrivateIpAddress || "N/A",
         })) || [];

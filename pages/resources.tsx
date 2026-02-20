@@ -95,6 +95,7 @@ export const Resources = ({
             <tr key={instance.instanceID}>
               <td>{instance.instanceID}</td>
               <td>{instance.name}</td>
+              <td>{instance.status}</td>
               <td>{instance.publicIP}</td>
               <td>{instance.privateIP}</td>
             </tr>
