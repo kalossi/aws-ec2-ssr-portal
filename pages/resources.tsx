@@ -77,12 +77,10 @@ export const Resources = ({
 
   return !serverSideInstances || serverSideInstances.length === 0 ? (
     <div>
-      <Header />
       <h1>No instances available.</h1>
     </div>
   ) : (
     <div>
-      <Header />
       <h1>Server-Side Instances:</h1>
       <table>
         <thead>

@@ -1,0 +1,15 @@
+.uploadButton {
+  @apply bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-200 ease-in-out;
+}
+
+.uploadButton:hover {
+  @apply bg-blue-700 shadow-lg;
+}
+
+.uploadButton:active {
+  @apply scale-95;
+}
+
+.statusText {
+  @apply mt-6 font-medium text-gray-700;
+}

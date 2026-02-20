@@ -2,8 +2,28 @@
 import fs from 'fs';
 import path from 'path';
 import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 //in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
+
+// Initialize S3 client once at top level
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION || "us-east-1"
+});
+
+// Export reusable functions
+export const uploadToS3 = async (
+  bucket: string,
+  key: string,
+  content: string
+): Promise<void> => {
+  const command = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: content,
+  });
+  await s3Client.send(command);
+};
 
 export interface InitialServerSideInstance {
   instanceID: string;

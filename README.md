@@ -39,7 +39,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - I installed Docker container for the PG server testing
 
 ```
-npm install @aws-sdk/client-ec2 pg ws fs
+npm install @aws-sdk/client-ec2 @aws-sdk/client-s3 pg ws fs
 ```
 ```
 npm install --save-dev @types/ws
@@ -48,6 +48,16 @@ Usage example:
 ```
 npm run dev
 ```
+
+## AI Assistant Guidelines
+
+**Important**: When working with GitHub Copilot or AI assistants on this project:
+
+- **DO NOT** modify code directly without explicit user approval
+- **ONLY** suggest code changes and architectural recommendations
+- **ALWAYS** ask or wait for user confirmation before editing files and make simple unless asked otherwise
+- **FOCUS** on teaching and explanation so the user learns and remembers. Also check that the whole project is functional and makes sense through different files
+- **PREFER** showing code examples over making automatic changes
 ```
 docker compose -f robotfw-docker-compose.yml run --rm robot
 ```
