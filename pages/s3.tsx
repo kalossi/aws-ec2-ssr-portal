@@ -1,6 +1,6 @@
-import { useState } from "react";
+//pages/s3.tsx
+import { useState, useEffect } from "react";
 import styles from "../styles/s3.module.css";
-import Header from "@/components/header";
 
 const S3 = () => {
   const [status, setStatus] = useState("");
@@ -26,11 +26,11 @@ const S3 = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        setStatus(`❌ Error: ${data.error}`);
+        setStatus(`Error: ${data.error}`);
         return;
       }
 
-      setStatus(`✅ Uploaded! Size: ${data.fileSizeMb}MB`);
+      setStatus(`Uploaded! Size: ${data.fileSizeMb}MB`);
       setUploadedFiles([
         ...uploadedFiles,
         {
@@ -40,12 +40,24 @@ const S3 = () => {
       ]);
     } catch (error) {
       setStatus(
-        `❌ Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     } finally {
       setIsLoading(false);
     }
   };
+
+  const [maxFileSizeMb, setMaxFileSizeMb] = useState<number | null>(null);
+
+  useEffect(() => {
+    const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8085';
+    const host = process.env.NEXT_PUBLIC_WS_HOST ?? 'localhost';
+    const ws = new WebSocket(`ws://${host}:${port}`);
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setMaxFileSizeMb(data.maxFileSizeMb);
+    };
+  }, []);
 
   return (
     <div>
@@ -93,7 +105,7 @@ const S3 = () => {
         <div className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-2xl font-semibold mb-6">Storage Settings</h2>
           <p className="text-gray-500">
-            [Storage quota and settings will go here]
+            Max file size allowed:{maxFileSizeMb !== null ? `${maxFileSizeMb} MB` : "Loading..."}
           </p>
         </div>
       </div>

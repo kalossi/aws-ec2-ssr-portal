@@ -5,37 +5,29 @@ import {
   fetchEc2Instances,
 } from "../utils/server_side_utils";
 import { useState, useEffect } from "react";
+import { pgClient, connectPG } from "../utils/server_side_utils";
 
 const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstance[]) => {
-  const { Client } = require('pg');
-
-  const client = new Client({
-    user: process.env.PG_USER ??"pg",
-    host: process.env.PG_HOST ?? "db",
-    database: process.env.PG_DB ?? "test",
-    password: process.env.PG_PASSWORD ?? "test1234",
-    port: Number(process.env.PG_PORT ?? 5432),
-  });
-
-  // console.log(`inside the db func: ${serverSideInstances}`);
+  console.log(`inside the db func: ${serverSideInstances}`);
 
   try {
-    await client.connect();
-    await client.query('BEGIN');
+    await connectPG();
+
+    await pgClient.query('BEGIN');
     for (const instance of serverSideInstances) {
       const dbQuery = `
         INSERT INTO instances (instance_id, private_ip, public_ip)
         VALUES ($1, $2, $3)
         ON CONFLICT (instance_id) DO NOTHING`;
       const values = [instance.instanceID, instance.privateIP, instance.publicIP];
-      await client.query(dbQuery, values);
+      await pgClient.query(dbQuery, values);
     }
-    await client.query('COMMIT');
+    await pgClient.query('COMMIT');
   } catch (err: any) {
-    try { await client.query('ROLLBACK'); } catch (_) { /* ignore */ }
+    try { await pgClient.query('ROLLBACK'); } catch (_) { /* ignore */ }
     console.error("Error inserting data:", err && err.stack ? err.stack : err);
   } finally {
-    await client.end();
+    await pgClient.end();
   }
 };
 

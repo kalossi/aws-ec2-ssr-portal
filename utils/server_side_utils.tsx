@@ -2,9 +2,9 @@
 import fs from 'fs';
 import path from 'path';
 import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 //in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
+import { Client } from 'pg';
 
 export interface InitialServerSideInstance {
   instanceID: string;
@@ -13,6 +13,25 @@ export interface InitialServerSideInstance {
   publicIP: string | "N/A";
   privateIP: string | "N/A";
 }
+
+export const pgClient = new Client({
+  user: process.env.PG_USER ?? "pg",
+  host: process.env.PG_HOST ?? "db",
+  database: process.env.PG_DB ?? "test",
+  password: process.env.PG_PASSWORD ?? "test1234",
+  port: Number(process.env.PG_PORT ?? 5432),
+});
+
+export const connectPG = async () => {
+    await pgClient.connect();
+    (pgClient as any)._connected = true; // optional flag to track connection
+};
+
+export const queryPG = async (sql: string, values?: any[]) => {
+  await connectPG();
+  return pgClient.query(sql, values);
+};
+
 //invoke instance so that you can use it in many places
 const wss = new WebSocketServer({port: 8085});
 // keep last broadcast payload to avoid sending unchanged data
