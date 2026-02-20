@@ -74,5 +74,4 @@ RESULTS ARE ONLY SAVED ON LOCALLY RUN TESTS!
 ```
 # TODO:
 - Clean and comment tests, compose files, envs ...for different enviroments: Remote and local
-- Maybe spread app upon multiple files?
-- What next? What could _it_ do? :)
+- Make PG, EC2, S3 in own files and make reusable functions
