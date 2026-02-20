@@ -53,10 +53,20 @@ const S3 = () => {
     const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8085';
     const host = process.env.NEXT_PUBLIC_WS_HOST ?? 'localhost';
     const ws = new WebSocket(`ws://${host}:${port}`);
+
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMaxFileSizeMb(data.maxFileSizeMb);
-    };
+  try {
+    const parsed = JSON.parse(event.data);
+
+    // If new format
+    if (parsed?.maxFileSizeMb !== undefined) {
+      setMaxFileSizeMb(parsed.maxFileSizeMb);
+    }
+
+  } catch (err) {
+    console.error("WS parse error:", err);
+  }
+};
   }, []);
 
   return (

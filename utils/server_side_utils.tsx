@@ -4,7 +4,7 @@ import path from 'path';
 import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
 //in server side you need to import these
 import { WebSocketServer, WebSocket } from 'ws';
-import { Client } from 'pg';
+import { Pool } from "pg";
 
 export interface InitialServerSideInstance {
   instanceID: string;
@@ -14,23 +14,13 @@ export interface InitialServerSideInstance {
   privateIP: string | "N/A";
 }
 
-export const pgClient = new Client({
+export const pgPool = new Pool({
   user: process.env.PG_USER ?? "pg",
   host: process.env.PG_HOST ?? "db",
   database: process.env.PG_DB ?? "test",
   password: process.env.PG_PASSWORD ?? "test1234",
   port: Number(process.env.PG_PORT ?? 5432),
 });
-
-export const connectPG = async () => {
-    await pgClient.connect();
-    (pgClient as any)._connected = true; // optional flag to track connection
-};
-
-export const queryPG = async (sql: string, values?: any[]) => {
-  await connectPG();
-  return pgClient.query(sql, values);
-};
 
 //invoke instance so that you can use it in many places
 const wss = new WebSocketServer({port: 8085});
@@ -42,8 +32,9 @@ const startWSServer = () => {
   wss.on('connection', async (ws: WebSocket) => {
 
     const instances = await fetchEc2Instances();
+    const maxFileSizeMb = await fetchS3Settings();
     //sent as string
-    const message = JSON.stringify(instances);
+    const message = JSON.stringify({ instances, maxFileSizeMb });
     ws.send(message);
 
     // update lastBroadcastPayload so subsequent broadcasts know current state
@@ -145,6 +136,20 @@ export const fetchEc2Instances = async () => {
     throw error;
   }
 };
+
+export const fetchS3Settings = async (): Promise<number | null> => {
+  try {
+    const result = await pgPool.query(
+      "SELECT max_file_size_mb FROM storage_config LIMIT 1"
+    );
+    return result.rows[0]?.max_file_size_mb ?? null;
+  } catch (err) {
+    console.error("Failed to fetch S3 settings:", err);
+    return null;
+  }
+};
+
+
 
 //start server once in render and fetch and send periodically
 startWSServer();
