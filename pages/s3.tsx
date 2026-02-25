@@ -1,124 +1,105 @@
-//pages/s3.tsx
+// pages/s3.tsx
 import { useState, useEffect } from "react";
 import styles from "../styles/s3.module.css";
 
 const S3 = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [maxFileSizeMb, setMaxFileSizeMb] = useState<number | null>(null);
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<
-    Array<{ fileName: string; size: number }>
+    { fileName: string; size: number }[]
   >([]);
 
-  const uploadFile = async () => {
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch("/api/upload"); // create a separate API route if needed
+        const data = await res.json();
+        setMaxFileSizeMb(data.maxFileSizeMb ?? null);
+      } catch (err) {
+        console.error("Failed to fetch max file size", err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  const handleFileUpload = async (file: File | null) => {
+    if (!file) return setStatus("Please select a file first");
+
     setStatus("Uploading...");
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileName: "demo.txt",
-          fileContent: "Hello from S3!",
-        }),
-      });
+      const sizeMb = file.size / (1024 * 1024);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setStatus(`Error: ${data.error}`);
+      if (maxFileSizeMb && sizeMb > maxFileSizeMb) {
+        setStatus(
+          `❌ File too large: ${sizeMb.toFixed(2)}MB > ${maxFileSizeMb}MB`,
+        );
         return;
       }
 
-      setStatus(`Uploaded! Size: ${data.fileSizeMb}MB`);
-      setUploadedFiles([
-        ...uploadedFiles,
-        {
-          fileName: data.fileName || "demo.txt",
-          size: parseFloat(data.fileSizeMb),
-        },
+      const fileContent = await file.text();
+
+      const formData = new FormData();
+      formData.append("fileName", file.name);
+      formData.append("fileContent", fileContent);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      setUploadedFiles((prev) => [
+        ...prev,
+        { fileName: file.name, size: sizeMb },
       ]);
-    } catch (error) {
-      setStatus(
-        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+      setStatus(`✅ Uploaded ${file.name} (${sizeMb.toFixed(2)}MB)`);
+    } catch (err: any) {
+      setStatus(`❌ Upload failed: ${err.message || err}`);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const [maxFileSizeMb, setMaxFileSizeMb] = useState<number | null>(null);
-
-  useEffect(() => {
-    const port = process.env.NEXT_PUBLIC_WS_PORT ?? '8085';
-    const host = process.env.NEXT_PUBLIC_WS_HOST ?? 'localhost';
-    const ws = new WebSocket(`ws://${host}:${port}`);
-
-    ws.onmessage = (event) => {
-  try {
-    const parsed = JSON.parse(event.data);
-
-    // If new format
-    if (parsed?.maxFileSizeMb !== undefined) {
-      setMaxFileSizeMb(parsed.maxFileSizeMb);
-    }
-
-  } catch (err) {
-    console.error("WS parse error:", err);
-  }
-};
-  }, []);
-
   return (
     <div>
+      <h1>S3 Storage Manager</h1>
+
+      {/* File Picker */}
       <div>
-        <h1 className="text-4xl font-bold mb-12 text-center">
-          S3 Storage Manager
-        </h1>
-
-        {/* Upload Section */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <h2 className="text-2xl font-semibold mb-6">Upload File</h2>
-          <button
-            className={styles.uploadButton}
-            onClick={uploadFile}
-            disabled={isLoading}
-          >
-            {isLoading ? "Uploading..." : "Upload demo.txt"}
-          </button>
-          {status && <p className={styles.statusText}>{status}</p>}
-        </div>
-
-        {/* Files List Section */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <h2 className="text-2xl font-semibold mb-6">Uploaded Files</h2>
-          {uploadedFiles.length === 0 ? (
-            <p className="text-gray-500">No files uploaded yet</p>
-          ) : (
-            <ul className="space-y-3">
-              {uploadedFiles.map((file, idx) => (
-                <li
-                  key={idx}
-                  className="p-4 bg-gray-50 rounded border border-gray-200 flex justify-between items-center"
-                >
-                  <span className="font-medium">{file.fileName}</span>
-                  <span className="text-gray-600">
-                    {file.size.toFixed(2)}MB
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Storage Settings Section */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-semibold mb-6">Storage Settings</h2>
-          <p className="text-gray-500">
-            Max file size allowed:{maxFileSizeMb !== null ? `${maxFileSizeMb} MB` : "Loading..."}
-          </p>
-        </div>
+        <input
+          type="file"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) setSelectedFile(file);
+          }}
+        />
+        <button
+          onClick={() => handleFileUpload(selectedFile)}
+          disabled={!selectedFile || isLoading}
+        >
+          {isLoading ? "Uploading..." : "Upload"}
+        </button>
+        {status && <p>{status}</p>}
+        <p>
+          Max file size allowed:{" "}
+          {maxFileSizeMb ? `${maxFileSizeMb} MB` : "Loading..."}
+        </p>
       </div>
+
+      {/* Uploaded files */}
+      <ul>
+        {uploadedFiles.map((f) => (
+          <li key={f.fileName}>
+            {f.fileName} — {f.size.toFixed(2)}MB
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

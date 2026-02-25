@@ -1,11 +1,11 @@
-//.components/resources.tsx
+// pages/resources.tsx
 import { GetServerSideProps } from "next";
 import {
   InitialServerSideInstance,
   fetchEc2Instances,
-} from "../utils/server_side_utils";
+} from "../utils/ec2_utils";
 import { useState, useEffect } from "react";
-import { pgPool } from "../utils/server_side_utils";
+import { pgPool } from "../utils/server_utils";
 
 const insertInstancesToDB = async (serverSideInstances: InitialServerSideInstance[]) => {
   console.log(`inside the db func: ${serverSideInstances}`);

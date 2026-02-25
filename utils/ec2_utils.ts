@@ -1,9 +1,9 @@
-//.utils/server_side_utils.tsx
+// .utils/ec2_utils.tsx
 import fs from 'fs';
 import path from 'path';
 import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
 //in server side you need to import these
-import { WebSocketServer, WebSocket } from 'ws';
+
 import { Pool } from "pg";
 
 export interface InitialServerSideInstance {
@@ -12,59 +12,6 @@ export interface InitialServerSideInstance {
   status: string | 'N/A';
   publicIP: string | "N/A";
   privateIP: string | "N/A";
-}
-
-export const pgPool = new Pool({
-  user: process.env.PG_USER ?? "pg",
-  host: process.env.PG_HOST ?? "db",
-  database: process.env.PG_DB ?? "test",
-  password: process.env.PG_PASSWORD ?? "test1234",
-  port: Number(process.env.PG_PORT ?? 5432),
-});
-
-//invoke instance so that you can use it in many places
-const wss = new WebSocketServer({port: 8085});
-// keep last broadcast payload to avoid sending unchanged data
-let lastBroadcastPayload = '';
-
-// on initial render - better to split these two and they also serve a different scenario, although using the same fetch
-const startWSServer = () => {
-  wss.on('connection', async (ws: WebSocket) => {
-
-    const instances = await fetchEc2Instances();
-    const maxFileSizeMb = await fetchS3Settings();
-    //sent as string
-    const message = JSON.stringify({ instances, maxFileSizeMb });
-    ws.send(message);
-
-    // update lastBroadcastPayload so subsequent broadcasts know current state
-    lastBroadcastPayload = message;
-
-    ws.on('close', () => {
-      console.log('web socket client disconnected')
-    })
-  });
-}
-
-//broadcast to all the clients - called with a interval again and again
-const broadcastUpdates = async () => {
-  // don't make AWS calls if no clients connected
-  if (wss.clients.size === 0) return;
-
-  const instances = await fetchEc2Instances();
-  //again, as string
-  const message = JSON.stringify(instances);
-
-  // only broadcast when something changed
-  if (message === lastBroadcastPayload) return;
-
-  lastBroadcastPayload = message;
-  //array of clients, objects
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
-    }
-  });
 }
 
 const MOCK_FILE = path.resolve(process.cwd(), 'tests', 'mock-ec2.json');
@@ -136,21 +83,3 @@ export const fetchEc2Instances = async () => {
     throw error;
   }
 };
-
-export const fetchS3Settings = async (): Promise<number | null> => {
-  try {
-    const result = await pgPool.query(
-      "SELECT max_file_size_mb FROM storage_config LIMIT 1"
-    );
-    return result.rows[0]?.max_file_size_mb ?? null;
-  } catch (err) {
-    console.error("Failed to fetch S3 settings:", err);
-    return null;
-  }
-};
-
-
-
-//start server once in render and fetch and send periodically
-startWSServer();
-setInterval(broadcastUpdates, 5000);
