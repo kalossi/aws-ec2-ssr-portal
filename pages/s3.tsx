@@ -14,7 +14,7 @@ const S3 = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await fetch("/api/upload"); // create a separate API route if needed
+        const res = await fetch("/api/upload");
         const data = await res.json();
         setMaxFileSizeMb(data.maxFileSizeMb ?? null);
       } catch (err) {
@@ -42,13 +42,15 @@ const S3 = () => {
 
       const fileContent = await file.text();
 
-      const formData = new FormData();
-      formData.append("fileName", file.name);
-      formData.append("fileContent", fileContent);
-
       const res = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileContent,
+        }),
       });
 
       const data = await res.json();
@@ -80,12 +82,13 @@ const S3 = () => {
           }}
         />
         <button
+          className={styles.uploadButton}
           onClick={() => handleFileUpload(selectedFile)}
           disabled={!selectedFile || isLoading}
         >
           {isLoading ? "Uploading..." : "Upload"}
         </button>
-        {status && <p>{status}</p>}
+        {status && <p className={styles.statusText}>{status}</p>}
         <p>
           Max file size allowed:{" "}
           {maxFileSizeMb ? `${maxFileSizeMb} MB` : "Loading..."}

@@ -6,7 +6,7 @@ import { pgPool } from "./server_utils";
 interface S3UploadParams {
   bucket: string;
   key: string;
-  content: string;
+  content: Buffer;
   sizeMb?: number;
 }
 
@@ -19,9 +19,9 @@ const s3Client = new S3Client({
 // Functions
 export const uploadToS3 = async (params: S3UploadParams): Promise<void> => {
   const { bucket, key, content } = params;
-  
+
   // console.log(`📤 Uploading to S3: bucket=${bucket}, key=${key}, region=${process.env.AWS_S3_REGION}`);
-  
+
   const maxFileSizeMb = await fetchS3Settings();
   const contentSizeMb = content.length / (1024 * 1024);
   if (maxFileSizeMb !== null && contentSizeMb > maxFileSizeMb) {
@@ -33,7 +33,7 @@ export const uploadToS3 = async (params: S3UploadParams): Promise<void> => {
     Key: key,
     Body: content,
   });
-  
+
   try {
     await s3Client.send(command);
     console.log(`✅ S3 upload successful`);
@@ -46,9 +46,11 @@ export const uploadToS3 = async (params: S3UploadParams): Promise<void> => {
 export const fetchS3Settings = async (): Promise<number | null> => {
   try {
     const result = await pgPool.query(
-      "SELECT max_file_size_mb FROM storage_config LIMIT 1"
+      "SELECT max_file_size_mb FROM storage_config LIMIT 1",
     );
-    return result.rows[0]?.max_file_size_mb ?? null;
+    if (!result.rows.length) return null;
+    console.log(`Fetched max_file_size_mb from DB: ${result.rows[0].max_file_size_mb} (type: ${typeof result.rows[0].max_file_size_mb})`);
+    return Number(result.rows[0].max_file_size_mb);
   } catch (err) {
     console.error("Failed to fetch S3 settings:", err);
     return null;
