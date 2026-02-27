@@ -18,15 +18,15 @@ services:
       - app
     restart: unless-stopped
     command: >
-      bash -c '
+      bash -c "
         # wait for app service on the shared network
         until curl -sSf http://app:3000/ >/dev/null; do
           echo waiting for app...
           sleep 5
         done
         rfbrowser init &&
-        robot --variable BASE:$$BASE --outputdir results tests
-      '
+        robot --variable BASE:$BASE --outputdir results tests
+      "
     networks:
       - ssr_net
 networks:

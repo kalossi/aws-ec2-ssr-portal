@@ -32,7 +32,8 @@ Simple S3 Smoke
     Wait For Elements State    css=body    visible    timeout=20s
      # Get page source and check for file input
     ${src}=    Get Page Source
-    ${has_input}=    Run Keyword And Return Status    Should Contain Element    css=input[type="file"]
+    Wait For Elements State    css=input[type="file"]    visible    timeout=10s
+    ${has_input}=    Run Keyword And Return Status    Should Contain Element    css=#file-upload
     Run Keyword If    ${has_input}    Log    File input present    ELSE    Fail    File input not found on S3 page
     # Check for max file size text
     ${has_max}=    Run Keyword And Return Status    Should Contain    ${src}    Max file size allowed

@@ -1,0 +1,82 @@
+services:
+  app:
+    image: node:20
+    container_name: ssr_next_app
+    working_dir: /work
+    volumes:
+      - ./:/work
+    environment:
+      - MOCK_EC2=true
+      - PORT=3000
+      - NODE_ENV=production
+      - PG_HOST=db
+      - PG_USER=pg
+      - PG_PASSWORD=test1234
+      - PG_DB=test
+      - PG_PORT=5432
+      - NEXT_PUBLIC_WS_HOST=app
+      - NEXT_PUBLIC_WS_PORT=8085
+    depends_on:
+      - db
+    networks:
+      - ssr_net
+    command: bash -lc "npm ci && npm run build && npm run start"
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: pg
+      POSTGRES_PASSWORD: test1234
+      POSTGRES_DB: test
+      TZ: Europe/Helsinki
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pg -d test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+     - ssr_net
+
+  robot:
+    image: marketsquare/robotframework-browser:latest
+    container_name: robot_framework
+    working_dir: /opt/robot
+    volumes:
+      - ./tests:/opt/robot/tests
+      - ./results:/opt/robot/results
+    environment:
+      - BASE=http://ssr_next_app:3000
+      - TZ=FI
+      - ROBOT_HEADLESS=true
+      - MOCK_EC2=true
+    ports:
+      - "9222:9222"
+      - "8082:8082"
+    depends_on:
+      - app
+    restart: unless-stopped
+    command: >
+      bash -c '
+        # wait for app service on the shared network
+        until curl -sSf http://app:3000/ >/dev/null; do
+          echo waiting for app...
+          sleep 5
+        done
+        rfbrowser init &&
+        robot --variable BASE:\$BASE --outputdir results tests
+      '
+    networks:
+      - ssr_net
+volumes:
+  node_modules:
+networks:
+  ssr_net:
+    driver: bridge
+   

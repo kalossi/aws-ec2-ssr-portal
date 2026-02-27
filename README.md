@@ -1,4 +1,4 @@
-# AWS EC2 machine loging utility
+# AWS EC2 machine loging utility & S3 bucket upload demo
 
 A simple site to view your ec2 instances in cloud, using aws-sdk API (work in progress)
 
@@ -73,5 +73,3 @@ robot-project/
 RESULTS ARE ONLY SAVED ON LOCALLY RUN TESTS!
 ```
 # TODO:
-- Clean and comment tests, compose files, envs ...for different enviroments: Remote and local
-- Make PG, EC2, S3 in own files and make reusable functions
