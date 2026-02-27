@@ -5,6 +5,7 @@ import styles from "../styles/s3.module.css";
 const S3 = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [maxFileSizeMb, setMaxFileSizeMb] = useState<number | null>(null);
+  const [newMaxSize, setNewMaxSize] = useState("");
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<
@@ -68,6 +69,28 @@ const S3 = () => {
     }
   };
 
+  const updateMaxSize = async () => {
+    const value = Number(newMaxSize);
+
+    if (!value || value <= 0) {
+      return setStatus("Invalid value");
+    }
+
+    const res = await fetch("/api/upload", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ maxFileSizeMb: value }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) return setStatus(data.error);
+
+    setMaxFileSizeMb(data.maxFileSizeMb);
+    setNewMaxSize("");
+    setStatus("✅ Max file size updated");
+  };
+
   return (
     <div>
       <h1>S3 Storage Manager</h1>
@@ -93,6 +116,15 @@ const S3 = () => {
           Max file size allowed:{" "}
           {maxFileSizeMb ? `${maxFileSizeMb} MB` : "Loading..."}
         </p>
+      </div>
+      <div>
+        <input
+          type="number"
+          value={newMaxSize}
+          onChange={(e) => setNewMaxSize(e.target.value)}
+          placeholder="New max size (MB)"
+        />
+        <button disabled={!newMaxSize || isLoading} onClick={updateMaxSize}>Update</button>
       </div>
 
       {/* Uploaded files */}

@@ -49,10 +49,28 @@ export const fetchS3Settings = async (): Promise<number | null> => {
       "SELECT max_file_size_mb FROM storage_config LIMIT 1",
     );
     if (!result.rows.length) return null;
-    console.log(`Fetched max_file_size_mb from DB: ${result.rows[0].max_file_size_mb} (type: ${typeof result.rows[0].max_file_size_mb})`);
+    console.log(
+      `Fetched max_file_size_mb from DB: ${result.rows[0].max_file_size_mb} (type: ${typeof result.rows[0].max_file_size_mb})`,
+    );
     return Number(result.rows[0].max_file_size_mb);
   } catch (err) {
     console.error("Failed to fetch S3 settings:", err);
     return null;
   }
+};
+
+export const updateS3Settings = async (
+  maxFileSizeMb: number,
+): Promise<void> => {
+  await pgPool.query(
+    `
+  INSERT INTO storage_config (id, max_file_size_mb, updated_at)
+  VALUES (1, $1, NOW())
+  ON CONFLICT (id)
+  DO UPDATE SET
+    max_file_size_mb = EXCLUDED.max_file_size_mb,
+    updated_at = NOW()
+  `,
+    [maxFileSizeMb],
+  );
 };

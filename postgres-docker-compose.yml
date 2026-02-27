@@ -6,6 +6,7 @@ services:
       POSTGRES_USER: pg
       POSTGRES_PASSWORD: test1234
       POSTGRES_DB: test
+      TZ: Europe/Helsinki
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pg -d test"]
       interval: 10s
