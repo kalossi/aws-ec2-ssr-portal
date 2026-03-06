@@ -10,13 +10,11 @@ interface S3UploadParams {
   sizeMb?: number;
 }
 
-// Clients
 const s3Client = new S3Client({
   region: process.env.AWS_S3_REGION || "eu-north-1",
   forcePathStyle: true, // for local testing with tools like LocalStack
 });
 
-// Functions
 export const uploadToS3 = async (params: S3UploadParams): Promise<void> => {
   const { bucket, key, content } = params;
 

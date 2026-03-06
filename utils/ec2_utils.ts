@@ -4,8 +4,6 @@ import path from 'path';
 import { EC2Client, DescribeInstancesCommand } from "@aws-sdk/client-ec2";
 //in server side you need to import these
 
-import { Pool } from "pg";
-
 export interface InitialServerSideInstance {
   instanceID: string;
   name: string | 'N/A';
