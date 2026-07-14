@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PORT: 3000
-      MOCK_EC2: 'true'             # enable mock data mode in your app for deterministic CI
+      MOCK_EC2: 'true'  
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24:  'true'           # enable mock data mode in your app for deterministic CI
     #   NODE_ENV: production
 
     steps:
