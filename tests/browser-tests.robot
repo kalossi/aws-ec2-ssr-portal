@@ -26,6 +26,26 @@ Simple Resources Smoke
     Take Screenshot
     Close Browser
 
+Simple S3 Diagnostic
+    New Browser    browser=chromium    headless=${HEADLESS}
+    New Context    ignoreHTTPSErrors=True
+    New Page    url=${BASE}/s3
+
+    Wait For Elements State    css=body    visible    timeout=20s
+
+    ${url}=    Get Url
+    ${title}=    Get Title
+    ${count}=    Get Element Count    css=input[type="file"]
+    ${src}=    Get Page Source
+
+    Log To Console    Current URL: ${url}
+    Log To Console    Page title: ${title}
+    Log To Console    File input count: ${count}
+    Log To Console    Page source: ${src}
+
+    Take Screenshot
+    Close Browser
+
 Simple S3 Smoke
     New Browser    browser=chromium    headless=${HEADLESS}
     New Context    ignoreHTTPSErrors=True
