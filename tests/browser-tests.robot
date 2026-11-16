@@ -26,25 +26,26 @@ Simple Resources Smoke
     Take Screenshot
     Close Browser
 
-Simple S3 Diagnostic
-    New Browser    browser=chromium    headless=${HEADLESS}
-    New Context    ignoreHTTPSErrors=True
-    New Page    url=${BASE}/s3
+# Simple S3 Diagnostic
+#     New Browser    browser=chromium    headless=${HEADLESS}
+#     New Context    ignoreHTTPSErrors=True
+#     New Page    url=${BASE}/s3
 
-    Wait For Elements State    css=body    visible    timeout=20s
+#     Wait For Elements State    css=body    visible    timeout=20s
 
-    ${url}=    Get Url
-    ${title}=    Get Title
-    ${count}=    Get Element Count    css=input[type="file"]
-    ${src}=    Get Page Source
+#     ${url}=    Get Url
+#     ${title}=    Get Title
+#     ${count}=    Get Element Count    css=input[type="file"]
+#     ${src}=    Get Page Source
 
-    Log To Console    Current URL: ${url}
-    Log To Console    Page title: ${title}
-    Log To Console    File input count: ${count}
-    Log To Console    Page source: ${src}
+#     Log To Console    Current URL: ${url}
+#     Log To Console    Page title: ${title}
+#     Log To Console    File input count: ${count}
+#     Log To Console    Page source: ${src}
 
-    Take Screenshot
-    Close Browser
+#     Take Screenshot
+#     Close Browser
+
 
 Simple S3 Smoke
     New Browser    browser=chromium    headless=${HEADLESS}
@@ -54,13 +55,12 @@ Simple S3 Smoke
     Wait For Elements State    css=body    visible    timeout=20s
     Wait For Elements State    css=input[type="file"]    visible    timeout=10s
 
-    ${has_input}=    Run Keyword And Return Status
-    ...    Should Contain Element    css=input[type="file"]
-
-    Should Be True    ${has_input}    File input not found on S3 page
+    ${count}=    Get Element Count    css=input[type="file"]
+    Should Be Equal As Integers    ${count}    1    File input not found on S3 page
 
     ${src}=    Get Page Source
     Should Contain    ${src}    Max file size allowed
 
     Take Screenshot
     Close Browser
+
